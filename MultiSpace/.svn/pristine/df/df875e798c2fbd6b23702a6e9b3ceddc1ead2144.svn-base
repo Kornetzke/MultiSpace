@@ -1,0 +1,74 @@
+package unitTests;
+
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+public class TestMissile {
+
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+
+	@Before
+	public void setUp() throws Exception {
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void testCycle() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testMove() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testInRange() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetDamage() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetDamage() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetEnergyCost() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetEnergyCost() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetID() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetID() {
+		fail("Not yet implemented"); // TODO
+	}
+
+}

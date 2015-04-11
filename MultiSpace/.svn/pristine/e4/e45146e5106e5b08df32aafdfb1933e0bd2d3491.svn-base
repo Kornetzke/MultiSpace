@@ -1,0 +1,431 @@
+package unitTests;
+
+import static org.junit.Assert.*;
+
+import java.awt.Point;
+
+import game.GamePlay;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import SpaceClient.SpaceShip;
+import SpaceClient.SpaceShip.PlayerState;
+import SpaceClient.SpaceShip.shipStatus;
+
+public class TestSpaceShip {
+SpaceShip testShip;
+GamePlay gameTest;
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+
+	@Before
+	public void setUp() throws Exception {
+		testShip = new SpaceShip(5,4,3);
+		gameTest = new GamePlay("Test");
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void testSetPlacement() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testCycle() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetForward() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetLeft() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetRight() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetBreak() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetFire() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testComputeTurnDirection() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testAccelerate() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testMove() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testMoveMissile() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testApplySpaceBreak() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testRegenerateStats() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testCheckFire() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testIsChange() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testResetChange() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testToString() {
+		System.out.println(testShip.toString());
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetDx() {
+		testShip.setDx(50.0);
+		assertTrue("The dx should be 50",50.0 == testShip.getDx());
+		testShip.setDx(5012.0);
+		assertTrue("The dx should be 5012",5012.0 == testShip.getDx());
+		testShip.setDx(-10.0);
+		assertTrue("The dx should be -10",-10.0 == testShip.getDx());
+	}
+
+	@Test
+	public void testSetDx() {
+		testShip.setDx(50.0);
+		assertTrue("The dx should be 50",50.0 == testShip.getDx());
+		testShip.setDx(5012.0);
+		assertTrue("The dx should be 5012",5012.0 == testShip.getDx());
+		testShip.setDx(-10.0);
+		assertTrue("The dx should be -10",-10.0 == testShip.getDx());
+	}
+
+	@Test
+	public void testGetDy() {
+		testShip.setDy(50.0);
+		assertTrue("The dy should be 50",50.0 == testShip.getDy());
+		testShip.setDy(5012.0);
+		assertTrue("The dy should be 5012",5012.0 == testShip.getDy());
+		testShip.setDy(-10.0);
+		assertTrue("The dy should be -10",-10.0 == testShip.getDy());
+	}
+
+	@Test
+	public void testSetDy() {
+		testShip.setDy(50.0);
+		assertTrue("The dy should be 50",50.0 == testShip.getDy());
+		testShip.setDy(5012.0);
+		assertTrue("The dy should be 5012",5012.0 == testShip.getDy());
+		testShip.setDy(-10.0);
+		assertTrue("The dy should be -10",-10.0 == testShip.getDy());
+	}
+
+	@Test
+	public void testGetMissiles() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testIsFiring() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testFire() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetMouseLocation() {
+		testShip.setMouseLocation(new Point(256,654));
+		assertEquals("The mouse x location should be 256",256,testShip.getMouseLocation().x);
+		assertEquals("The mouse y location should be 654",654,testShip.getMouseLocation().y);
+		testShip.setMouseLocation(new Point(2565,-51));
+		assertEquals("The mouse x location should be 2565",2565,testShip.getMouseLocation().x);
+		assertEquals("The mouse y location should be -51",-51,testShip.getMouseLocation().y);
+	}
+
+	@Test
+	public void testIsChanged() {
+		testShip.setChanged(true);
+		assertTrue("The changed variable on the testship should be true", testShip.isChanged());
+		testShip.setChanged(false);
+		assertFalse("The changed variable on the testship should be False", testShip.isChanged());
+	}
+
+	@Test
+	public void testSetChanged() {
+		testShip.setChanged(true);
+		assertTrue("The changed variable on the testship should be true", testShip.isChanged());
+		testShip.setChanged(false);
+		assertFalse("The changed variable on the testship should be False", testShip.isChanged());
+	}
+
+	@Test
+	public void testGetName() {
+		testShip.setName("TestShipName");
+		assertEquals("The name should be TestShipName","TestShipName",testShip.getName());
+		testShip.setName("Testingof");
+		assertEquals("The name should be Testingof","Testingof",testShip.getName());
+	}
+
+	@Test
+	public void testGetMouseLocation() {
+		testShip.setMouseLocation(new Point(256,654));
+		assertEquals("The mouse x location should be 256",256,testShip.getMouseLocation().x);
+		assertEquals("The mouse y location should be 654",654,testShip.getMouseLocation().y);
+		testShip.setMouseLocation(new Point(2565,-51));
+		assertEquals("The mouse x location should be 2565",2565,testShip.getMouseLocation().x);
+		assertEquals("The mouse y location should be -51",-51,testShip.getMouseLocation().y);
+	}
+
+	@Test
+	public void testCheckIfWeaponHit() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetShipStatus() {
+		testShip.setShipStatus("ALIVE");
+		assertEquals("The ship status should be Alive",shipStatus.ALIVE, testShip.getShipStatus());
+		testShip.setShipStatus("Dead");
+		assertEquals("The ship status should be Dead",shipStatus.DEAD, testShip.getShipStatus());
+	}
+
+	@Test
+	public void testGetShipStatus() {
+		testShip.setShipStatus("ALIVE");
+		assertEquals("The ship status should be Alive",shipStatus.ALIVE, testShip.getShipStatus());
+		testShip.setShipStatus("Dead");
+		assertEquals("The ship status should be Dead",shipStatus.DEAD, testShip.getShipStatus());
+	}
+
+	@Test
+	public void testSetClientState() {
+		testShip.setClientState("GAME");
+		assertEquals("The client status should be GAME ", PlayerState.GAME,testShip.getPlayerState());
+		testShip.setClientState("MENU");
+		assertEquals("The client status should be MENU ", PlayerState.MENU,testShip.getPlayerState());
+		testShip.setClientState("DISCONNECTED");
+		assertEquals("The client status should be DISCONNECT ", PlayerState.DISCONNECT,testShip.getPlayerState());
+	}
+
+	@Test
+	public void testGetPlayerState() {
+		testShip.setClientState("GAME");
+		assertEquals("The ship status should be GAME ", PlayerState.GAME,testShip.getPlayerState());
+		testShip.setClientState("MENU");
+		assertEquals("The ship status should be MENU ", PlayerState.MENU,testShip.getPlayerState());
+		testShip.setClientState("DISCONNECTED");
+		assertEquals("The ship status should be DISCONNECT ", PlayerState.DISCONNECT,testShip.getPlayerState());
+	}
+
+	@Test
+	public void testGetHealth() {
+		assertEquals("The Health should be 100",100.0,testShip.getHealth(),0.0);
+		testShip.setHealth(120);
+		assertEquals("The Health should be 120",120.0,testShip.getHealth(),0.0);
+		testShip.setHealth(10);
+		assertEquals("The Health should be 10",10.0,testShip.getHealth(),0.0);
+	}
+
+	@Test
+	public void testSetHealth() {
+		assertEquals("The Health should be 100",100.0,testShip.getHealth(),0.0);
+		testShip.setHealth(120);
+		assertEquals("The Health should be 120",120.0,testShip.getHealth(),0.0);
+		testShip.setHealth(10);
+		assertEquals("The Health should be 10",10.0,testShip.getHealth(),0.0);
+	}
+
+	@Test
+	public void testIncrementHealth() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetName() {
+		testShip.setName("TestShipName");
+		assertEquals("The name should be TestShipName","TestShipName",testShip.getName());
+		testShip.setName("Testingof");
+		assertEquals("The name should be Testingof","Testingof",testShip.getName());
+	}
+
+	@Test
+	public void testGetMaxHealth() {
+		assertEquals("The max Health should be 100",100.0,testShip.getMaxHealth(),0.0);
+		testShip.setMaxHealth(120);
+		assertEquals("The max Health should be 120",120.0,testShip.getMaxHealth(),0.0);
+		testShip.setMaxHealth(10);
+		assertEquals("The max Health should be 10",10.0,testShip.getMaxHealth(),0.0);
+	}
+
+	@Test
+	public void testSetMaxHealth() {
+		assertEquals("The max Health should be 100",100.0,testShip.getMaxHealth(),0.0);
+		testShip.setMaxHealth(120);
+		assertEquals("The max Health should be 120",120.0,testShip.getMaxHealth(),0.0);
+		testShip.setMaxHealth(10);
+		assertEquals("The max Health should be 10",10.0,testShip.getMaxHealth(),0.0);
+	}
+
+	@Test
+	public void testGetShield() {
+		assertEquals("The shield should be 100",100.0,testShip.getShield(),0.0);
+		testShip.setShield(120);
+		assertEquals("The shield should be 120",120.0,testShip.getShield(),0.0);
+		testShip.setShield(0);
+		assertEquals("The shield should be 0",0.0,testShip.getShield(),0.0);
+	}
+
+	@Test
+	public void testSetShield() {
+		assertEquals("The shield should be 100",100.0,testShip.getShield(),0.0);
+		testShip.setShield(120);
+		assertEquals("The shield should be 120",120.0,testShip.getShield(),0.0);
+		testShip.setShield(0);
+		assertEquals("The shield should be 0",0.0,testShip.getShield(),0.0);
+	}
+
+	@Test
+	public void testGetMaxShield() {
+		assertEquals("The max Shield should be 100",100.0,testShip.getMaxShield(),0.0);
+		testShip.setMaxShield(120);
+		assertEquals("The max Shield should be 120",120.0,testShip.getMaxShield(),0.0);
+		testShip.setMaxShield(0);
+		assertEquals("The max Shield should be 0",0.0,testShip.getMaxShield(),0.0);
+	}
+
+	@Test
+	public void testSetMaxShield() {
+		assertEquals("The max Shield should be 100",100.0,testShip.getMaxShield(),0.0);
+		testShip.setMaxShield(120);
+		assertEquals("The max Shield should be 120",120.0,testShip.getMaxShield(),0.0);
+		testShip.setMaxShield(0);
+		assertEquals("The max Shield should be 0",0.0,testShip.getMaxShield(),0.0);
+	}
+
+	@Test
+	public void testGetEnergy() {
+		assertEquals("The energy should be 100",100.0,testShip.getEnergy(),0.0);
+		testShip.setEnergy(120);
+		assertEquals("The energy should be 120",120.0,testShip.getEnergy(),0.0);
+		testShip.setEnergy(0);
+		assertEquals("The energy should be 0",0.0,testShip.getEnergy(),0.0);
+	}
+
+	@Test
+	public void testSetEnergy() {
+		assertEquals("The energy should be 100",100.0,testShip.getEnergy(),0.0);
+		testShip.setEnergy(120);
+		assertEquals("The energy should be 120",120.0,testShip.getEnergy(),0.0);
+		testShip.setEnergy(0);
+		assertEquals("The energy should be 0",0.0,testShip.getEnergy(),0.0);
+	}
+
+	@Test
+	public void testGetMaxEnergy() {
+		assertEquals("The max Energy should be 100",100.0,testShip.getMaxEnergy(),0.0);
+		testShip.setMaxEnergy(120);
+		assertEquals("The max Energy should be 120",120.0,testShip.getMaxEnergy(),0.0);
+		testShip.setMaxEnergy(0);
+		assertEquals("The max Energy should be 0",0.0,testShip.getMaxEnergy(),0.0);
+	}
+
+	@Test
+	public void testSetMaxEnergy() {
+		assertEquals("The max Energy should be 100",100.0,testShip.getMaxEnergy(),0.0);
+		testShip.setMaxEnergy(120);
+		assertEquals("The max Energy should be 120",120.0,testShip.getMaxEnergy(),0.0);
+		testShip.setMaxEnergy(0);
+		assertEquals("The max Energy should be 0",0.0,testShip.getMaxEnergy(),0.0);
+	}
+
+	@Test
+	public void testSetHitBox() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testRemoveMissile() {				//NOT DONE
+		testShip.fire(0.0, 0.0, 52, "Test");
+		testShip.removeMissile("Test");
+		assertEquals("There should be no missiles",0,testShip.getMissiles().length);
+	}
+
+	@Test
+	public void testRespawn() {
+		testShip.setHealth(10);
+		testShip.setEnergy(10);
+		testShip.setShield(0);
+		testShip.setShipStatus("dead");
+		testShip.respawn();
+		assertEquals("The ship should have Reset",false ,testShip.isDead());
+		assertEquals("The ship should have Reset",testShip.getMaxHealth() ,testShip.getHealth(),0.0);
+		assertEquals("The ship should have Reset",testShip.getMaxEnergy() ,testShip.getEnergy(),0.0);
+		assertEquals("The ship should have Reset",testShip.getMaxShield(),testShip.getShield(),0.0);
+	}
+
+	@Test
+	public void testGetDeathCount() {
+		assertEquals("Ship should have no deaths", 0,testShip.getDeathCount());
+		testShip.incrementDeathCount();
+		assertEquals("Ship should have 1 death",1,testShip.getDeathCount());
+	}
+
+	@Test
+	public void testIsDead() {
+		assertEquals("Should return false",false,testShip.isDead());
+		testShip.setShipStatus("Dead");
+		assertEquals("Should return true",true,testShip.isDead());
+	}
+	@Test
+	public void testIncrementDeathCount(){
+		assertEquals("Ship should have no deaths", 0,testShip.getDeathCount());
+		testShip.incrementDeathCount();
+		assertEquals("Ship should have 1 death",1,testShip.getDeathCount());
+	}
+}

@@ -1,0 +1,350 @@
+package game;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+
+import menu.GameButton;
+import SpaceClient.Background;
+import SpaceClient.Board;
+import SpaceClient.Drawable;
+import SpaceClient.Handler;
+import SpaceClient.SpaceShip;
+
+/**
+ * This class is used to maintain the game while in the gameplay state.
+ * 
+ * @author Tom Zachary and Kyle Kornetzke
+ * 
+ */
+public class GamePlay {
+	public static Handler handler;
+	private Background backgroundImage_;
+	private static SpaceShip player_; // Object that the player will control.
+	private GameButton deadButton_;
+	private static List<Drawable> space_ = new ArrayList<Drawable>();
+
+	private static Hashtable<String, SpaceShip> playerHashTable_ = new Hashtable<String, SpaceShip>();
+
+	private double displacePaintX_, displacePaintY_; // Displacement for the x and
+													// y value for drawing other
+													// drawable objects, to
+													// center the vision of the
+													// board on the player
+													// screen with focus on
+/**
+ * The default constructor for game play will set up the player ship, background, and the death button.
+ * 
+ * @precondition no precondition
+ * 
+ * 
+ */
+	public GamePlay() {
+		deadButton_ = new GameButton(new Point(Board.width / 2,
+				Board.height / 2 + 100), Color.red, Color.WHITE, "RESPAWN");
+
+		backgroundImage_ = new Background();
+
+		player_ = new SpaceShip(0, (int) (Math.random() * 5000),
+				(int) (Math.random() * 5000));
+
+		player_.setName("Kyle" + (int) (Math.random() * 1000));
+
+	}
+	public GamePlay(String test){
+		handler = new Handler();
+	}
+/**
+ * keyPressed method will convert the keyEvent event into a player status. 
+ * <p>example If the 'a' key is pressed the player.setLeft(true) will be called
+ * 
+ * @param e - keyEvent object
+ * @precondition player is not null
+ * 
+ */
+	public void keyPressed(KeyEvent e) {
+
+		if (e.getKeyCode() == 65) {
+			player_.setLeft(true);
+		}
+		if (e.getKeyCode() == 68) {
+			player_.setRight(true);
+		}
+		if (e.getKeyCode() == 87) {
+			player_.setForward(true);
+		}
+		if (e.getKeyCode() == 83) {
+			player_.setBreak(true);
+		}
+		if (e.getKeyCode() == 32) {
+			player_.setFire(true);
+		}
+
+	}
+
+	
+	/**
+	 * keyReleased method will convert the keyEvent event into a player status. 
+	 * <p>example If the 'a' key is released the player.setLeft(false) will be called
+	 * 
+	 * @param e - keyEvent object
+	 * @precondition player is not null
+	 * 
+	 */
+	public void keyReleased(KeyEvent e) {
+
+		if (e.getKeyCode() == 65) {
+			player_.setLeft(false);
+		}
+		if (e.getKeyCode() == 68) {
+			player_.setRight(false);
+		}
+		if (e.getKeyCode() == 87) {
+			player_.setForward(false);
+		}
+		if (e.getKeyCode() == 83) {
+			player_.setBreak(false);
+		}
+		if (e.getKeyCode() == 32) {
+			player_.setFire(false);
+		}
+	}
+
+	/**
+	 * the mousePressed method will listen for the mouse to be pressed. When called the method will check to see if the player
+	 * alive or dead.<p> If dead and the mouse is within the respawn button the player.respawn() is called.<p> If the player is alive the
+	 * player.setFire(true) will be called
+	 * @param e - MouseEvent
+	 * @precondition player is not null
+	 */
+	public void mousePressed(MouseEvent e) {
+		if (player_.isDead() && deadButton_.contain(e.getPoint())) {
+			player_.respawn();
+		}
+		player_.setFire(true);
+	}
+	/**
+	 * The mouseReleased method, when called, will call player.setFire(false). This will stop the player ship from firing
+	 * @param e - MouseEvent
+	 * @precondition Player is not null
+	 */
+	public void mouseReleased(MouseEvent e) {
+		player_.setFire(false);
+	}
+	/**
+	 * When called the mouseMoved will check if the player is alive or dead.
+	 * <p>If the player is dead and the MouseEvent moves to inside the deadButton, the button will change
+	 * <p>If the player is alive it will change the Player.setMouseLocation based on the MouseEvent Point
+	 * @param e - MouseEvent
+	 */
+	public void mouseMoved(MouseEvent e) {
+		if (player_.isDead()) {
+			if (deadButton_.contain(e.getPoint())) {
+				deadButton_.changeInsideColor(Color.black);
+			} else
+				deadButton_.changeInsideColor(Color.red);
+		}
+		player_.setMouseLocation(e.getPoint());
+
+	}
+
+	/**
+	 * When the mouseDragged method is called it will change the player.mouseLocation to the new MouseEvent point
+	 * @param e - MouseEvent
+	 */
+	public void mouseDragged(MouseEvent e) {
+		player_.setMouseLocation(e.getPoint());
+
+	}
+
+	/**
+	 * The update method moves all the objects that change placement during the game. This method moves playerHashTable's missiles
+	 * and then moves their hitboxes.
+	 * <p>If the player is dead the deadButton.update() is called
+	 * <p>If the player is alive the player.cycle() is called, then the hitCheck() is called
+	 * <p>lastly the backgroundImage is updated
+	 * @precondition PlayerHashTable is not null
+	 * <p> Player is not null
+	 * <p> backgroundImage is not null
+	 * <p> deadButton is not null
+	 */
+	public void update() {
+
+		synchronized (playerHashTable_) {
+			for (SpaceShip x : playerHashTable_.values()) {
+				x.MoveMissile();
+				x.updateHitBox();
+
+			}
+		}
+
+		if (player_.isDead()) {
+			deadButton_
+					.update(new Point(Board.width / 2, Board.height / 2 + 100));
+
+		} else {
+			player_.cycle();
+			HitCheck();
+		}
+
+		backgroundImage_.update(player_.middle.x, player_.middle.y);
+
+	}
+
+	/**
+	 * The HitCheck method checks if the player got hit by any of the missiles of the other players.
+	 * @preconditions playerHashTable is not null
+	 * @preconditions player is not null
+	 */
+	public void HitCheck() {
+		synchronized (playerHashTable_) {
+			for (SpaceShip x : playerHashTable_.values()) {
+				x.checkIfWeaponHit(player_);
+			}
+		}
+
+	}
+	
+	/**
+	 * The draw method checks if the handler is ready before drawing anything else. The handler would be getting all of the
+	 * planets or ships from the server when not ready.
+	 * <p>If the handler is ready, the draw method will find what kind of displacement is needed to keep the player's ship in the center
+	 * of the screen. All objects will be drawn with this displacement to balance the move. This DOES NOT change the real position of the objects,
+	 * just how they are drawn on the screen.
+	 * <p>The method draws in the order of, background, planets, other players, player, ui
+	 * <p>If the player is dead the screen will add a filter and not draw the player's ship. The respawn button will be visible.
+	 * @param g2d - Graphics2D
+	 * @precondition handler, background, playerHashTable, space, player are not null
+	 */
+
+	public void draw(Graphics2D g2d) {
+
+		if (handler.isGameReady() == false) {
+
+			g2d.setColor(Color.black);
+			g2d.fillRect(0, 0, Board.width, Board.height);
+			return;
+		}
+
+		displacePaintX_ = player_.getmiddleX() - (Board.width / 2);
+		displacePaintY_ = player_.getmiddleY() - (Board.height / 2);
+
+		backgroundImage_.paint(g2d, displacePaintX_, displacePaintY_);
+
+		for (Drawable x : space_) {
+			if (Math.abs(player_.getX() - x.getX()) <= 3000
+					&& Math.abs(player_.getY() - x.getY()) <= 3000)
+				x.paint(g2d, displacePaintX_, displacePaintY_);
+		}
+
+		synchronized (playerHashTable_) {
+			for (SpaceShip x : playerHashTable_.values()) {
+				x.paint(g2d, displacePaintX_, displacePaintY_);
+			}
+		}
+		player_.paint(g2d, displacePaintX_, displacePaintY_);
+
+		drawUI(g2d);
+
+		if (player_.isDead()) {
+			g2d.setColor(new Color(0f, 0f, 0f, .5f));
+			g2d.fillRect(0, 0, Board.width, Board.height);
+			g2d.setColor(Color.white);
+			g2d.setFont(new Font(Font.SANS_SERIF, Font.ITALIC,
+					Board.height / 20));
+			g2d.drawString("YOU ARE DEAD", Board.width / 2 - 4
+					* g2d.getFont().getSize(), Board.height / 2
+					- g2d.getFont().getSize());
+			g2d.drawString("Deaths: " + player_.getDeathCount(), Board.width / 2
+					- 4 * g2d.getFont().getSize(), Board.height / 2);
+			deadButton_.draw(g2d);
+		}
+
+	}
+
+	/**
+	 * The drawUI method will draw the information of the ship on the top left side of the screen for the player to view.
+	 * 
+	 * @param g2d
+	 * @precondition player is not null
+	 */
+	public void drawUI(Graphics2D g2d) {
+		int UIwidth = Board.width / 5;
+		int UIheight = Board.height / 5;
+
+		int UImaxWidth = 275;
+		int UImaxHeight = 150;
+
+		if (UIwidth > UImaxWidth)
+			UIwidth = UImaxWidth;
+		if (UIheight > UImaxHeight)
+			UIheight = UImaxHeight;
+
+		g2d.setColor(Color.RED);
+		g2d.fillRoundRect(0, 0, UIwidth, UIheight / 3, 10, 10);
+		g2d.fillRoundRect(0, UIheight / 3 + 1, UIwidth, UIheight / 3, 10, 10);
+		g2d.setColor(Color.DARK_GRAY);
+		g2d.fillRoundRect(0, (UIheight * 2) / 3 + 1, UIwidth, UIheight / 3, 10,
+				10);
+
+		g2d.setColor(Color.GREEN);
+		g2d.drawRoundRect(0, 0, UIwidth, UIheight / 3, 10, 10);
+		g2d.fillRoundRect(0, 0,
+				(int) (UIwidth * (player_.getHealth() / player_.getMaxHealth())),
+				UIheight / 3, 10, 10);
+
+		g2d.setColor(Color.BLUE);
+		g2d.drawRoundRect(0, UIheight / 3 + 1, UIwidth, UIheight / 3, 10, 10);
+		g2d.fillRoundRect(0, UIheight / 3 + 1,
+				(int) (UIwidth * (player_.getShield() / player_.getMaxShield())),
+				UIheight / 3, 10, 10);
+
+		g2d.setColor(Color.MAGENTA);
+		g2d.drawRoundRect(0, (UIheight * 2) / 3 + 1, UIwidth, UIheight / 3, 10,
+				10);
+		g2d.fillRoundRect(0, (UIheight * 2) / 3 + 1,
+				(int) (UIwidth * (player_.getEnergy() / player_.getMaxEnergy())),
+				UIheight / 3, 10, 10);
+
+	}
+
+	public static Hashtable<String, SpaceShip> getPlayerHashTable() {
+		return playerHashTable_;
+	}
+
+
+	public static SpaceShip getPlayer() {
+		return player_;
+	}
+
+	public static List<Drawable> getSpaceList() {
+		return space_;
+	}
+
+	public void startHandler(String string) {
+
+		handler = new Handler(string);
+		handler.start();
+	}
+
+	public static void setSpaceList(List<Drawable> testList) {
+		space_=testList;
+		
+	}
+	public static void setPlayer(SpaceShip test) {
+		player_=test;
+		
+	}
+	public static void setPlayerHashTable(Hashtable<String, SpaceShip> testHash) {
+		playerHashTable_ = testHash;
+		
+	}
+
+
+}

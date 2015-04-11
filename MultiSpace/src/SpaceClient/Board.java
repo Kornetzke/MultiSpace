@@ -1,0 +1,288 @@
+package SpaceClient;
+
+import game.GamePlay;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+import menu.StartMenu;
+import menu.ModifyMenu;
+
+/**
+ * This is the main panel for the game. This contains the main sequence of
+ * methods used for the program.
+ * 
+ * @author Tom Zachary and Kyle Kornetzke
+ * 
+ */
+public class Board extends JPanel implements ActionListener {
+
+	private static final long serialVersionUID = 1L;
+
+	public static enum GameState {
+		GAME, MAINMENU, STARTMENU, MODIFYMENU, SETTINGS, ESCMENU, DISCONNECTED
+	};
+
+	public static GamePlay gamePlay_;
+	private StartMenu startMenu_;
+	public static ModifyMenu modifyMenu_;
+
+	public static GameState gameStatus_;
+
+	public static int height, width; // height and width of the board.
+
+	private Timer timer_; // timer for the repaint function.
+
+	public static ImageIcon[] iiarray = {
+
+	new ImageIcon(Board.class.getResource("Fighter150W.png")),
+			new ImageIcon(Board.class.getResource("LazerFix.png")),
+			new ImageIcon(Board.class.getResource("Space.png")),
+			new ImageIcon(Board.class.getResource("DaP.png")),
+			new ImageIcon(Board.class.getResource("planet1.png")),
+			new ImageIcon(Board.class.getResource("planet2.png")),
+			new ImageIcon(Board.class.getResource("planet3.png")),
+			new ImageIcon(Board.class.getResource("planet4.png")),
+			new ImageIcon(Board.class.getResource("TitanFighter150W.png")),
+			new ImageIcon(Board.class.getResource("RaveShip150W.png")),
+			new ImageIcon(Board.class.getResource("PinkPsychotic120W.png"))
+
+	};
+
+	private final int DELAY = 15; //15
+
+	/**
+	 * Default constructor of Board. Instantiates all of the items in board.
+	 */
+	public Board() {
+		this.setFocusTraversalKeysEnabled(false);
+		gameStatus_ = GameState.STARTMENU;
+		startMenu_ = new StartMenu();
+		modifyMenu_ = new ModifyMenu();
+		gamePlay_ = new GamePlay();
+		Board.height = this.getBounds().height;
+		Board.width = this.getBounds().width;
+		setFocusable(true);
+		setDoubleBuffered(true);
+
+		addKeyListener(new KAdapter());
+		addMouseListener(new MAdapter());
+		addMouseMotionListener(new TAdapter());
+
+		timer_ = new Timer(DELAY, this);
+		timer_.start();
+
+	}
+
+	private class KAdapter extends KeyAdapter {
+		/**
+		 * KeyPressed Method. Sends to the specific menu or to GamePlay
+		 */
+		public void keyPressed(KeyEvent e) {
+
+			switch (gameStatus_) {
+			case GAME:
+				gamePlay_.keyPressed(e);
+				break;
+			case ESCMENU:
+				break;
+			case MAINMENU:
+				break;
+			case MODIFYMENU:
+				modifyMenu_.keyPressed(e);
+				break;
+			case SETTINGS:
+				break;
+			case STARTMENU:
+				break;
+			default:
+				break;
+			}
+
+		}
+
+		/**
+		 * KeyReleased. Sends to the specific menu or to GamePlay
+		 */
+		public void keyReleased(KeyEvent e) {
+			switch (gameStatus_) {
+			case GAME:
+				gamePlay_.keyReleased(e);
+			case ESCMENU:
+				break;
+			case MAINMENU:
+				break;
+			case MODIFYMENU:
+				break;
+			case SETTINGS:
+				break;
+			case STARTMENU:
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	private class MAdapter extends MouseAdapter {
+		/**
+		 * MouseClicked. Sends to the specific menu.
+		 */
+		public void mouseClicked(MouseEvent e) {
+			if (gameStatus_ == GameState.STARTMENU) {
+				startMenu_.mouseClicked(e);
+			}
+			if (gameStatus_ == GameState.MODIFYMENU) {
+				modifyMenu_.mouseClicked(e);
+			}
+		}
+
+		/**
+		 * not used. Inherited
+		 */
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		/**
+		 * not used. Inherited
+		 */
+		public void mouseExited(MouseEvent e) {
+		}
+
+		/**
+		 * MousePressed. Sends to GamePlay if the gamestate is Game
+		 */
+		public void mousePressed(MouseEvent e) {
+			if (gameStatus_ == GameState.GAME) {
+				gamePlay_.mousePressed(e);
+			}
+
+		}
+
+		/**
+		 * MouseReleased. Sends to GamePlay if the gamestate is Game
+		 */
+
+		public void mouseReleased(MouseEvent e) {
+			if (gameStatus_ == GameState.GAME) {
+				gamePlay_.mouseReleased(e);
+			}
+		}
+
+	}
+
+	private class TAdapter extends MouseMotionAdapter {
+		/**
+		 * Used to track mouse movement.  Sends to the state the game is in.
+		 */
+		public void mouseMoved(MouseEvent e) {
+			switch (gameStatus_) {
+			case GAME:
+				gamePlay_.mouseMoved(e);
+				break;
+			case STARTMENU:
+				startMenu_.mouseMoved(e);
+				break;
+			case MODIFYMENU:
+				modifyMenu_.mouseMoved(e);
+			case ESCMENU:
+				break;
+			case MAINMENU:
+				break;
+			case SETTINGS:
+				break;
+			default:
+				break;
+			}
+		}
+/**
+ * MouseDragged.  Sends to gamePlay if the game state is in game.
+ */
+		public void mouseDragged(MouseEvent e) {
+			if (gameStatus_ == GameState.GAME) {
+				gamePlay_.mouseDragged(e);
+			}
+
+		}
+	}
+/**
+ * Activated by the timer.  This is the main loop for the game.
+ */
+	public void actionPerformed(ActionEvent arg0) {
+
+		Board.height = this.getHeight();
+		Board.width = this.getWidth();
+		switch (gameStatus_) {
+		case GAME:
+
+			gamePlay_.update();
+
+			break;
+		case STARTMENU:
+
+			startMenu_.update();
+			break;
+		case MODIFYMENU:
+			modifyMenu_.update();
+		case ESCMENU:
+			break;
+		case MAINMENU:
+			break;
+		case SETTINGS:
+			break;
+		default:
+			break;
+
+		} // end switch
+		repaint();
+
+	}
+/**
+ * Paints the panel onto the frame.  Calls the draw of the appropriate menu/gameplay.
+ */
+	public void paint(Graphics g) {
+
+		super.paint(g);
+		Graphics2D g2d = (Graphics2D) g;
+		
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+
+		switch (gameStatus_) {
+		case GAME:
+			gamePlay_.draw(g2d);
+			break;
+		case MAINMENU:
+			break;
+		case STARTMENU:
+			startMenu_.draw(g2d);
+			break;
+		case MODIFYMENU:
+			modifyMenu_.draw(g2d);
+		case ESCMENU:
+			break;
+		case SETTINGS:
+			break;
+		default:
+			break;
+		}
+
+		Toolkit.getDefaultToolkit().sync();
+		g.dispose();
+
+	}
+
+}

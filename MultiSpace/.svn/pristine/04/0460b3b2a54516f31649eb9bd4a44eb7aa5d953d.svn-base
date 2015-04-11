@@ -1,0 +1,268 @@
+package game;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+
+import menu.GameButton;
+import SpaceClient.Background;
+import SpaceClient.Board;
+import SpaceClient.Drawable;
+import SpaceClient.Handler;
+import SpaceClient.SpaceShip;
+
+/**
+ * This class is used to maintain the game while in the gameplay state.
+ * 
+ * @author Tom Zachary and Kyle Kornetzke
+ * 
+ */
+public class GamePlay {
+	public static Handler handler;
+	private Background backgroundImage_;
+	private static SpaceShip player_; // Object that the player will control.
+	private GameButton deadButton_;
+	private static List<Drawable> space_ = new ArrayList<Drawable>();
+
+	private static Hashtable<String, SpaceShip> playerHashTable_ = new Hashtable<String, SpaceShip>();
+
+	private double displacePaintX_, displacePaintY_; // Displacement for the x and
+													// y value for drawing other
+													// drawable objects, to
+													// center the vision of the
+													// board on the player
+													// screen with focus on
+
+	public GamePlay() {
+		deadButton_ = new GameButton(new Point(Board.width / 2,
+				Board.height / 2 + 100), Color.red, Color.WHITE, "RESPAWN");
+
+		backgroundImage_ = new Background();
+
+		player_ = new SpaceShip(0, (int) (Math.random() * 5000),
+				(int) (Math.random() * 5000));
+
+		player_.setName("Kyle" + (int) (Math.random() * 1000));
+
+	}
+
+	public void keyPressed(KeyEvent e) {
+
+		if (e.getKeyCode() == 65) {
+			player_.setLeft(true);
+		}
+		if (e.getKeyCode() == 68) {
+			player_.setRight(true);
+		}
+		if (e.getKeyCode() == 87) {
+			player_.setForward(true);
+		}
+		if (e.getKeyCode() == 83) {
+			player_.setBreak(true);
+		}
+		if (e.getKeyCode() == 32) {
+			player_.setFire(true);
+		}
+
+	}
+
+	public void keyReleased(KeyEvent e) {
+
+		if (e.getKeyCode() == 65) {
+			player_.setLeft(false);
+		}
+		if (e.getKeyCode() == 68) {
+			player_.setRight(false);
+		}
+		if (e.getKeyCode() == 87) {
+			player_.setForward(false);
+		}
+		if (e.getKeyCode() == 83) {
+			player_.setBreak(false);
+		}
+		if (e.getKeyCode() == 32) {
+			player_.setFire(false);
+		}
+	}
+
+	public void mousePressed(MouseEvent e) {
+		if (player_.isDead() && deadButton_.contain(e.getPoint())) {
+			player_.respawn();
+		}
+		player_.setFire(true);
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		player_.setFire(false);
+	}
+
+	public void mouseMoved(MouseEvent e) {
+		if (player_.isDead()) {
+			if (deadButton_.contain(e.getPoint())) {
+				deadButton_.changeInsideColor(Color.black);
+			} else
+				deadButton_.changeInsideColor(Color.red);
+		}
+		player_.setMouseLocation(e.getPoint());
+
+	}
+
+	public void mouseDragged(MouseEvent e) {
+		player_.setMouseLocation(e.getPoint());
+
+	}
+
+	public void update() {
+
+		synchronized (getPlayerHashTable()) {
+			for (SpaceShip x : getPlayerHashTable().values()) {
+				x.MoveMissile();
+				x.updateHitBox();
+
+			}
+		}
+
+		if (player_.isDead()) {
+			deadButton_
+					.update(new Point(Board.width / 2, Board.height / 2 + 100));
+
+		} else {
+			player_.cycle();
+			HitCheck();
+		}
+
+		backgroundImage_.update(getPlayer().middle.x, getPlayer().middle.y);
+
+	}
+
+	public void HitCheck() {
+		for (SpaceShip x : getPlayerHashTable().values()) {
+			x.checkIfWeaponHit(getPlayer());
+		}
+
+	}
+
+	public void draw(Graphics2D g2d) {
+
+		if (handler.isGameReady() == false) {
+
+			g2d.setColor(Color.black);
+			g2d.fillRect(0, 0, Board.width, Board.height);
+			return;
+		}
+
+		displacePaintX_ = getPlayer().getmiddleX() - (Board.width / 2);
+		displacePaintY_ = getPlayer().getmiddleY() - (Board.height / 2);
+
+		backgroundImage_.paint(g2d, displacePaintX_, displacePaintY_);
+
+		for (Drawable x : space_) {
+			if (Math.abs(player_.getX() - x.getX()) <= 3000
+					&& Math.abs(player_.getY() - x.getY()) <= 3000)
+				x.paint(g2d, displacePaintX_, displacePaintY_);
+		}
+
+		synchronized (getPlayerHashTable()) {
+			for (SpaceShip x : getPlayerHashTable().values()) {
+				x.paint(g2d, displacePaintX_, displacePaintY_);
+			}
+		}
+		getPlayer().paint(g2d, displacePaintX_, displacePaintY_);
+
+		drawUI(g2d);
+
+		if (player_.isDead()) {
+			g2d.setColor(new Color(0f, 0f, 0f, .5f));
+			g2d.fillRect(0, 0, Board.width, Board.height);
+			g2d.setColor(Color.white);
+			g2d.setFont(new Font(Font.SANS_SERIF, Font.ITALIC,
+					Board.height / 20));
+			g2d.drawString("YOU ARE DEAD", Board.width / 2 - 4
+					* g2d.getFont().getSize(), Board.height / 2
+					- g2d.getFont().getSize());
+			g2d.drawString("Deaths: " + player_.getDeathCount(), Board.width / 2
+					- 4 * g2d.getFont().getSize(), Board.height / 2);
+			deadButton_.draw(g2d);
+		}
+
+	}
+
+	public void drawUI(Graphics2D g2d) {
+		int UIwidth = Board.width / 5;
+		int UIheight = Board.height / 5;
+
+		int UImaxWidth = 275;
+		int UImaxHeight = 150;
+
+		if (UIwidth > UImaxWidth)
+			UIwidth = UImaxWidth;
+		if (UIheight > UImaxHeight)
+			UIheight = UImaxHeight;
+
+		g2d.setColor(Color.RED);
+		g2d.fillRoundRect(0, 0, UIwidth, UIheight / 3, 10, 10);
+		g2d.fillRoundRect(0, UIheight / 3 + 1, UIwidth, UIheight / 3, 10, 10);
+		g2d.setColor(Color.DARK_GRAY);
+		g2d.fillRoundRect(0, (UIheight * 2) / 3 + 1, UIwidth, UIheight / 3, 10,
+				10);
+
+		g2d.setColor(Color.GREEN);
+		g2d.drawRoundRect(0, 0, UIwidth, UIheight / 3, 10, 10);
+		g2d.fillRoundRect(0, 0,
+				(int) (UIwidth * (player_.getHealth() / player_.getMaxHealth())),
+				UIheight / 3, 10, 10);
+
+		g2d.setColor(Color.BLUE);
+		g2d.drawRoundRect(0, UIheight / 3 + 1, UIwidth, UIheight / 3, 10, 10);
+		g2d.fillRoundRect(0, UIheight / 3 + 1,
+				(int) (UIwidth * (player_.getShield() / player_.getMaxShield())),
+				UIheight / 3, 10, 10);
+
+		g2d.setColor(Color.MAGENTA);
+		g2d.drawRoundRect(0, (UIheight * 2) / 3 + 1, UIwidth, UIheight / 3, 10,
+				10);
+		g2d.fillRoundRect(0, (UIheight * 2) / 3 + 1,
+				(int) (UIwidth * (player_.getEnergy() / player_.getMaxEnergy())),
+				UIheight / 3, 10, 10);
+
+	}
+
+	public static Hashtable<String, SpaceShip> getPlayerHashTable() {
+		return playerHashTable_;
+	}
+
+	public static void setPlayerHashTable(
+			Hashtable<String, SpaceShip> playerHashTable) {
+		playerHashTable_ = playerHashTable;
+	}
+
+	public static SpaceShip getPlayer() {
+		return player_;
+	}
+
+	public static void setPlayer(SpaceShip player) {
+		GamePlay.player_ = player;
+	}
+
+	public static List<Drawable> getSpaceList() {
+		return space_;
+	}
+
+	public void startHandler(String string) {
+
+		handler = new Handler(string);
+		handler.start();
+	}
+
+	public static void setSpaceList(List<Drawable> testList) {
+		space_=testList;
+		
+	}
+
+}

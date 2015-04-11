@@ -1,0 +1,109 @@
+package SpaceClient;
+
+/**
+ * This class is the parent class of all weapon classes.
+ * 
+ * @author Kyle Kornetzke
+ * 
+ */
+public class Missile extends Drawable {
+
+	private static double energyCost_ = 10;
+	private String id_;
+	private double damage = 7;
+	private double dx, dy;
+	private double acc;
+	private double speed;
+	private double maxSpeed;
+	private double range;
+	private double traveled;
+
+	public Missile(double x, double y, int direction, double dx, double dy,
+			String missileID) {
+		super(1, 0, 0);
+
+		this.id_ = missileID;
+		this.x = x - width / 2;
+		this.y = y - height / 2;
+		this.acc = 1;
+		this.speed = 0;
+		this.maxSpeed = 30;
+		this.range = 5000;
+		this.traveled = 0;
+		this.direction.setDirection(direction);
+		this.dx = dx;
+		this.dy = dy;
+
+	}
+
+	public void move() {
+		double dir = Math.toRadians((direction.getDirection()));
+		dx -= Math.sin(dir) * acc;
+		dy -= Math.cos(dir) * acc;
+
+		speed = Math.sqrt(Math.pow(dy, 2) + Math.pow(dx, 2));
+
+		if (speed > maxSpeed) {
+			dy = maxSpeed / speed * dy;
+			dx = maxSpeed / speed * dx;
+		}
+
+		x += dx;
+		y += dy;
+
+		traveled += Math.sqrt(Math.pow(Math.abs(dx), 2)
+				+ Math.pow(Math.abs(dy), 2));
+
+		updateMiddle();
+		hitBox.update(middle, direction.getDirection());
+
+	}
+
+	public boolean inRange() {
+		return traveled <= range;
+	}
+
+	@Override
+	public void cycle() {
+
+	}
+
+	public double getDamage() {
+		return damage;
+	}
+
+	public void setDamage(double newDamage) {
+		damage = newDamage;
+	}
+
+	/**
+	 * @return the energyCost
+	 */
+	public static double getEnergyCost() {
+		return energyCost_;
+	}
+
+	/**
+	 * @param energyCost
+	 *            the energyCost to set
+	 */
+	public static void setEnergyCost(double energyCost) {
+		Missile.energyCost_ = energyCost;
+	}
+
+	/**
+	 * @return the iD
+	 */
+	public String getID() {
+		return id_;
+	}
+
+	/**
+	 * @param iD
+	 *            the iD to set
+	 */
+	public void setID(String iD) {
+		id_ = iD;
+	}
+
+}

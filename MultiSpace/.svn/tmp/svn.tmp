@@ -1,0 +1,781 @@
+package SpaceClient;
+
+import game.GamePlay;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
+
+public class SpaceShip extends Drawable {
+
+
+	
+	private String shipName;
+	
+	private double health_;
+	private double maxHealth_;
+	private double shield_;
+	private double maxShield_;
+	private double shieldRegen_;
+	private double shieldRegenDelay_;
+	private double shieldRegenCount_;
+	private double energy_;
+	private double maxEnergy_;
+	private double energyRegen_;
+	private int deathCount_;
+	
+	private boolean changed_ =false;
+	private double dx_, dy_;
+	private double acceleration_;
+	private double spaceBreak_;
+	private final double MAX_SPEED=15;
+	private double speed_ = 0;
+	private final double TURN_SPEED =3;
+	private int weaponCounter_;
+	private final int WEAPON_COOLDOWN = 10;
+	private Keydown keydown_;
+	public boolean left_ =true;
+	private boolean firing_=false;
+	public  enum shipStatus  {ALIVE, DEAD};
+	public static enum PlayerState {MENU,GAME,DISCONNECT};
+	private PlayerState playerState_;
+	private shipStatus shipStatus_ = shipStatus.ALIVE;
+	
+	private Vector<Missile> weaponList_ = new Vector<Missile>();
+	
+	
+	private Point mouseLocation_;
+
+	class Keydown {
+		private boolean left, right, forward, fire, spaceBreak;
+
+		public Keydown() {
+			left = false;
+			right = false;
+			forward = false;
+			spaceBreak = false;
+			fire = false;
+		}
+	}
+
+	public SpaceShip(int faceNumber, int x, int y) {
+		super(0, x, y);
+		deathCount_=0;
+
+		
+
+		ii = Board.iiarray[faceNumber];
+		image = ii.getImage();
+		acceleration_=.5;
+		spaceBreak_=.4;
+		direction.setDirection(0);
+		mouseLocation_ = new Point(0,0);
+		keydown_ = new Keydown();
+		updateMiddle();
+
+		dx_ = 0;
+		dy_ = 0;
+		
+		
+		
+this.setHitBox(faceNumber);
+		
+		maxShield_ = 100;
+		maxHealth_ = 100;
+		maxEnergy_ = 100;
+		
+		shieldRegenDelay_ = 120;
+		shieldRegenCount_=0;
+		shieldRegen_=.6;
+		energyRegen_=.5;		
+		
+		shield_ = 100;
+		health_ = 100;
+		energy_ = 100;
+		
+
+	}
+	
+	
+	public SpaceShip(int face, String name, double x, double y, int dir){
+		super(face,x,y);
+		shipName = name;
+		direction.setDirection(dir);
+		updateMiddle();
+		this.setHitBox(face);
+		
+		maxShield_ = 100;
+		maxHealth_ = 100;
+		maxEnergy_ = 100;
+		
+		shield_ = 100;
+		health_ = 100;
+		energy_ = 100;
+	}
+	
+
+	
+	/**
+	 * This method changes the x, y, and direction of the ship.
+	 * @param x a new value of x for the ship
+	 * @param y a new value of y for the ship
+	 * @param direction the new direction for the ship
+	 * 
+	 */
+	public SpaceShip() {
+		super(0, 0, 0);
+	}
+
+
+	/**
+	 * This method changes the x, y, and direction of the ship.
+	 * @param x a new value of x for the ship
+	 * @param y a new value of y for the ship
+	 * @param direction the new direction for the ship
+	 * 
+	 */
+	public void setPlacement(double x, double y, int direction){
+		super.x = x;
+		super.y = y;
+		super.setDirection(direction);
+		
+	}
+
+	public void setForward(boolean set) {
+		this.keydown_.forward = set;
+	}
+
+	public void setLeft(boolean set) {
+		this.keydown_.left = set;
+	}
+
+	public void setRight(boolean set) {
+		this.keydown_.right = set;
+	}
+
+	public void setBreak(boolean set) {
+		this.keydown_.spaceBreak = set;
+	}
+
+	public void setFire(boolean set) {
+		this.keydown_.fire = set;
+	}
+	
+	public void computeTurnDirection(){
+			Point boardMiddle = new Point(Board.width/2,Board.height/2);
+
+		
+		int mouseAngle = (int)Math.toDegrees(Math.atan2(boardMiddle.x - mouseLocation_.x, boardMiddle.y - mouseLocation_.y));
+
+		if (mouseAngle<0)
+			mouseAngle=360+mouseAngle;		
+		if (direction.getDirection()!=mouseAngle)
+			changed_=true;
+		
+		int move = (direction.getRotationDegrees(mouseAngle));
+		
+		if (move<0){
+			if(-TURN_SPEED<move)
+				direction.incrementDirection(move);
+			else
+				direction.incrementDirection(-TURN_SPEED);
+		}
+		if (move>0){
+			if(TURN_SPEED>move)
+				direction.incrementDirection(move);
+			else
+				direction.incrementDirection(TURN_SPEED);
+		}
+		
+	}
+	
+	/**
+	 * This method calculates the displacement of the ship with respect to direction and acceleration of the ship.
+	 * The new displacement will be added to the ships displacement 
+	 * 
+	 * 
+	 * @param direction - This is the direction of the acceleration
+	 * @param percentage - This is the percentage of the ship's acceleration that will be used
+	 * 
+	 * 
+	 * 
+	 */
+	public void Accelerate(double deltaDirection, double percentage) {
+
+			double dir = Math.toRadians(direction.getDirection()+deltaDirection);
+			dy_ -= Math.cos(dir) * (acceleration_*percentage);
+			dx_ -= Math.sin(dir) * (acceleration_*percentage);
+			speed_ = Math.sqrt(Math.pow(dy_, 2) + Math.pow(dx_, 2));
+
+	}
+	
+	/**
+	 * The Move() method is called once the Accelerate() method is finished.
+	 * 
+	 * This method will change the X and Y by the dx and dy found in Accelerate().
+	 * <p>
+	 * If dx and dy are not zero the variable changed will be set to true
+	 * This will be used when sending data to the SpaceServer.
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+	public void Move() {
+		
+			if ((dx_ < 0.001 && dx_ > 0) || (dx_ > -0.001 && dx_ < 0)) {
+				dx_ = 0;
+			}
+
+			if ((dy_ < 0.001 && dy_ > 0) || (dy_ > -0.001 && dy_ < 0)) {
+				dy_ = 0;
+			}
+			
+			
+			
+			speed_ = Math.sqrt(Math.pow(dy_, 2) + Math.pow(dx_, 2));
+			
+			if (speed_>MAX_SPEED){
+				dy_ = MAX_SPEED / speed_ * dy_;
+				dx_ = MAX_SPEED / speed_ * dx_;
+		}
+
+		x += dx_;
+		y += dy_;
+
+		updateMiddle();
+		hitBox.update(middle, direction.getDirection());
+
+		MoveMissile();
+
+		GamePlay.handler.sendToServer("Move:" + shipName + ":" + x + ":" + y
+				+ ":" + direction.getDirection());
+
+	}
+
+	public void MoveMissile(){
+		updateMiddle();
+
+		for (int link = 0; link < weaponList_.size(); link++) {
+			if (weaponList_.get(link).inRange())
+				weaponList_.get(link).move();
+			else
+				weaponList_.remove(link);
+		}
+	}
+
+	public void applySpaceBreak() {
+
+		
+			if (dx_ < 0) {
+				if (dx_ > spaceBreak_)
+					dx_ = 0;
+				else
+					dx_ += spaceBreak_;
+			}
+			if (dy_ < 0) {
+				if (dy_ > spaceBreak_)
+					dy_ = 0;
+				else
+					dy_ += spaceBreak_;
+			}
+			if (dx_ > 0) {
+				if (dx_ < spaceBreak_)
+					dx_ = 0;
+				else
+					dx_ -= spaceBreak_;
+			}
+			if (dy_ > 0) {
+				if (dy_ < spaceBreak_)
+					dy_ = 0;
+				else
+					dy_ -= spaceBreak_;
+			}
+	}
+
+	public void cycle() {
+		if(shipStatus_ == shipStatus.ALIVE){
+		regenerateStats();
+		
+
+		
+		computeTurnDirection();
+		
+		checkFire();
+		
+		if (keydown_.forward){
+			Accelerate(0, .7);
+		}
+		if (keydown_.spaceBreak){
+			applySpaceBreak();
+		}
+		if (keydown_.left){
+			Accelerate(90,.3);
+		}
+		if (keydown_.right){
+			Accelerate(-90,.3);
+		}
+		
+		Move();
+		}
+	}
+
+	public void paint(Graphics2D g2d, double dx, double dy) {
+		if(shipStatus_ == shipStatus.ALIVE){
+
+			
+		for (int x = 0; x < weaponList_.size(); x++) {
+			weaponList_.get(x).paint(g2d, dx, dy);
+		}
+		g2d.rotate(Math.toRadians(-getDirection()), middle.x - dx, middle.y - dy);		
+		g2d.drawImage(image, (int) (x - dx), (int) (y - dy), null);
+		g2d.rotate(Math.toRadians(getDirection()), middle.x - dx, middle.y - dy);
+		g2d.setColor(Color.white);
+		g2d.drawString(shipName, (int) (x - dx)+Board.width/20, (int) (y - dy));
+		
+		
+	
+		}
+		
+	}
+	
+	public void regenerateStats(){
+		if(energy_ <maxEnergy_){
+		energy_+=energyRegen_;
+		}
+		if(shieldRegenCount_>0){
+			
+			shieldRegenCount_--;
+		}
+		if(shield_ < maxShield_  && shieldRegenCount_ <= 0){
+			shield_ +=shieldRegen_;
+		}
+	
+	}
+	
+	public void checkFire(){
+		
+		if (weaponCounter_ > 0){
+			weaponCounter_--;
+		}
+		if (keydown_.fire && weaponCounter_ == 0 && energy_ >= Missile.getEnergyCost() ) {
+	
+			weaponCounter_ = WEAPON_COOLDOWN;
+			
+			String missileID = shipName+"_"+System.currentTimeMillis();
+			fire( dx_, dy_, direction.getDirection(),missileID);
+			
+			
+			energy_ -= Missile.getEnergyCost();
+			
+				GamePlay.handler.sendToServer("AddMissile:" + shipName + ":"
+					  + dx_ + ":"
+					+ dy_+ ":"+ direction.getDirection()+":"+missileID);
+		
+			
+		}
+		
+	}
+
+	
+	
+	public void resetChange(){
+		changed_ = false;
+	}
+	
+	public String toString(){
+		return shipName+":"+x+":"+y+":"+direction.getDirection();
+				
+	}
+	/**
+	 * @return the dx
+	 */
+	public double getDx() {
+		return dx_;
+	}
+
+
+	/**
+	 * @param dx the dx to set
+	 */
+	public void setDx(double dx) {
+		this.dx_ = dx;
+	}
+
+
+	/**
+	 * @return the dy
+	 */
+	public double getDy() {
+		return dy_;
+	}
+
+
+	/**
+	 * @param dy the dy to set
+	 */
+	public void setDy(double dy) {
+		this.dy_ = dy;
+	}
+	
+	public Missile[] getMissiles(){
+		return (Missile[]) weaponList_.toArray();
+	}
+
+
+	public boolean isFiring() {
+		if(energy_ >=5){
+		if(firing_==true){
+			firing_=false;
+			return true;
+		}else
+		return firing_;
+		}
+		else
+		return false;
+	}
+
+	public void fire(double dx, double dy, int direction, String missileID) {
+		double gunx =0;
+		double guny =0;
+		switch (this.imageNumber){
+		
+		case 0:
+			gunx = Math.cos(Math.toRadians(direction))*44;
+			guny = Math.sin(Math.toRadians(direction))*44;	
+			break;
+			
+		case 8:
+			gunx = Math.cos(Math.toRadians(direction))*7;
+			guny = Math.sin(Math.toRadians(direction))*7;	
+			break;
+
+		case 9:
+			gunx = Math.cos(Math.toRadians(direction))*57;
+			guny = Math.sin(Math.toRadians(direction))*57;	
+			break;
+			
+		case 10:
+			gunx = Math.cos(Math.toRadians(direction))*44;
+			guny = Math.sin(Math.toRadians(direction))*44;	
+			break;
+		}
+		
+					
+		if(left_){
+		weaponList_.add(new Missile(middle.x+gunx, middle.y-guny, direction, dx, dy, missileID));
+		left_=false;
+		}
+		else{
+			weaponList_.add(new Missile(middle.x-gunx, middle.y+guny, direction, dx, dy, missileID));
+		left_=true;	
+		}
+
+	
+			
+		
+	}
+	public void setMouseLocation(Point loc){
+		mouseLocation_ = loc;
+	} 
+	/**
+	 * @return the changed
+	 */
+	public boolean isChanged() {
+		return changed_;
+	}
+	/**
+	 * @param changed the changed to set
+	 */
+	public void setChanged(boolean changed) {
+		this.changed_ = changed;
+	}
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return shipName;
+	}
+	
+	/**
+	 * @return the mouseLocation
+	 */
+	public Point getMouseLocation() {
+		return mouseLocation_;
+	}
+
+	public void checkIfWeaponHit(SpaceShip otherPlayer) {
+
+		List<String> removeList = new LinkedList<String>();
+		synchronized(weaponList_){
+		for (Missile m : weaponList_) {
+			Point[] missilePoints = m.getHitPoints();
+
+			for (int i = 0; i < missilePoints.length; i++) {
+
+				if (otherPlayer.hitBox.getPolygon().contains(missilePoints[i]) || m.hitBox.contains(otherPlayer.hitBox.getPolyPoints())){
+					otherPlayer.damageShip(m.getDamage());
+					removeList.add("RemoveMissile:"+m.getID());
+					break;
+					
+				}
+			}
+		}
+		}
+		for( String str : removeList ){
+		GamePlay.handler.sendToServer(str);
+		}
+	}
+
+	private void damageShip(double damage) {
+		
+		shieldRegenCount_ = shieldRegenDelay_;
+
+		if(shield_ > damage){
+			shield_ -= damage;
+		}else{
+			damage -= shield_;
+			shield_ = 0;
+			health_ -= damage;
+		}
+		if (health_ < 1){
+			setShipStatus("Dead");
+			GamePlay.handler.sendToServer("Dead:"+shipName);
+		}
+	}
+
+
+	public void setShipStatus(String status) {
+		if ( status.compareTo("Alive") == 0 ){
+		shipStatus_ = shipStatus.ALIVE;		
+		} else if (status.compareTo("Dead") == 0 ){
+			if(shipStatus_ == shipStatus.ALIVE){
+			incrementDeathCount();
+	
+			
+			}
+			shipStatus_ = shipStatus.DEAD;
+		}
+	}
+	
+	public shipStatus getShipStatus(){
+		return shipStatus_;
+	}
+
+
+	public void setClientState(String string) {
+		if( string.compareTo("GAME")==0){
+			playerState_ = PlayerState.GAME;
+		}
+		else if( string.compareTo("MENU")==0){
+			playerState_ = PlayerState.MENU;
+		}if( string.compareTo("DISCONNECTED")==0){
+			playerState_ = PlayerState.DISCONNECT;
+		}
+		
+	}
+	public PlayerState getPlayerState(){
+		return playerState_;
+	}
+	public double getHealth(){
+		return health_;
+	}
+	public void setHealth(double newHealth){
+		health_ = newHealth;
+	}
+	public void incrementHealth(double deltaHealth){
+		health_+=deltaHealth;
+	}
+
+
+	public void setName(String name) {
+		this.shipName = name;
+	}
+
+
+	/**
+	 * @return the maxHealth
+	 */
+	public double getMaxHealth() {
+		return maxHealth_;
+	}
+
+
+	/**
+	 * @param maxHealth the maxHealth to set
+	 */
+	public void setMaxHealth(double maxHealth) {
+		this.maxHealth_ = maxHealth;
+	}
+
+
+	/**
+	 * @return the shield
+	 */
+	public double getShield() {
+		return shield_;
+	}
+
+
+	/**
+	 * @param shield the shield to set
+	 */
+	public void setShield(double shield) {
+		this.shield_ = shield;
+	}
+
+
+	/**
+	 * @return the maxshield
+	 */
+	public double getMaxShield() {
+		return maxShield_;
+	}
+
+
+	/**
+	 * @param maxshield the maxshield to set
+	 */
+	public void setMaxShield(double maxshield) {
+		this.maxShield_ = maxshield;
+	}
+
+
+	/**
+	 * @return the energy
+	 */
+	public double getEnergy() {
+		return energy_;
+	}
+
+
+	/**
+	 * @param energy the energy to set
+	 */
+	public void setEnergy(double energy) {
+		this.energy_ = energy;
+	}
+
+
+	/**
+	 * @return the maxEnergy
+	 */
+	public double getMaxEnergy() {
+		return maxEnergy_;
+	}
+
+
+	/**
+	 * @param maxEnergy the maxEnergy to set
+	 */
+	public void setMaxEnergy(double maxEnergy) {
+		this.maxEnergy_ = maxEnergy;
+	}
+
+
+	public void setHitBox(int ship) {
+	switch(ship){
+	
+	case 8:
+		startingHitBoxPoints = new Point[8];
+		startingHitBoxPoints[0] = new Point((int)x+4, (int)y+2);
+		startingHitBoxPoints[1] = new Point((int)(x+145), (int)y+4);
+		startingHitBoxPoints[2] = new Point((int)(x+146), (int)y+31);
+		startingHitBoxPoints[3] = new Point((int)(x+101), (int)y+48);
+		startingHitBoxPoints[4] = new Point((int)(x+75), (int)y+146);
+		startingHitBoxPoints[5] = new Point((int)(x+46), (int)y+46);
+		startingHitBoxPoints[6] = new Point((int)(x+2), (int)y+30);
+		startingHitBoxPoints[7] = new Point((int)(x+2), (int)y+6);
+		hitBox.setHitbox(startingHitBoxPoints, middle);
+		break;
+	case 0:
+		startingHitBoxPoints = new Point[8];
+		startingHitBoxPoints[0] = new Point((int)x+62, (int)y);
+		startingHitBoxPoints[1] = new Point((int)(x+82), (int)y+73);
+		startingHitBoxPoints[2] = new Point((int)(x+124), (int)y+105);
+		startingHitBoxPoints[3] = new Point((int)(x+105), (int)y+125);
+		startingHitBoxPoints[4] = new Point((int)(x+62), (int)y+137);
+		startingHitBoxPoints[5] = new Point((int)(x+20), (int)y+125);
+		startingHitBoxPoints[6] = new Point((int)(x+0), (int)y+105);
+		startingHitBoxPoints[7] = new Point((int)(x+42), (int)y+73);
+		hitBox.setHitbox(startingHitBoxPoints, middle);
+		break;
+		
+	case 9:
+		startingHitBoxPoints = new Point[10];
+		startingHitBoxPoints[0] = new Point((int)x+60, (int)y+0);
+		startingHitBoxPoints[1] = new Point((int)(x+36), (int)y+69);
+		startingHitBoxPoints[2] = new Point((int)(x+1), (int)y+113);
+		startingHitBoxPoints[3] = new Point((int)(x+1), (int)y+126);
+		startingHitBoxPoints[4] = new Point((int)(x+44), (int)y+220);
+		startingHitBoxPoints[5] = new Point((int)(x+104), (int)y+220);
+		startingHitBoxPoints[6] = new Point((int)(x+147), (int)y+126);
+		startingHitBoxPoints[7] = new Point((int)(x+147), (int)y+113);
+		startingHitBoxPoints[8] = new Point((int)(x+116), (int)y+69);
+		startingHitBoxPoints[9] = new Point((int)(x+89), (int)y+0);
+		hitBox.setHitbox(startingHitBoxPoints, middle);
+		break;
+
+		//NEED CHANGE HERE
+	case 10:
+		startingHitBoxPoints = new Point[8];
+		startingHitBoxPoints[0] = new Point((int)x+4, (int)y+2);
+		startingHitBoxPoints[1] = new Point((int)(x+145), (int)y+4);
+		startingHitBoxPoints[2] = new Point((int)(x+146), (int)y+31);
+		startingHitBoxPoints[3] = new Point((int)(x+101), (int)y+48);
+		startingHitBoxPoints[4] = new Point((int)(x+75), (int)y+146);
+		startingHitBoxPoints[5] = new Point((int)(x+46), (int)y+46);
+		startingHitBoxPoints[6] = new Point((int)(x+2), (int)y+30);
+		startingHitBoxPoints[7] = new Point((int)(x+2), (int)y+6);
+		hitBox.setHitbox(startingHitBoxPoints, middle);
+		break;
+		
+	}
+	}
+
+
+	public void removeMissile(String string) {
+		int index=-1;
+		for(Missile m : weaponList_ ){
+			if(m.getID().compareTo(string)==0)
+				index = weaponList_.indexOf(m);
+				
+		}
+		if(index!=-1)
+		weaponList_.remove(index);
+			
+	}
+
+
+	public void respawn() {
+		health_ = maxHealth_;
+		shield_ = maxShield_;
+		energy_ = maxEnergy_;
+		x = 0;
+		y = 0;
+		shipStatus_ = shipStatus.ALIVE;
+		GamePlay.handler.sendToServer("Alive:"+shipName);
+	}
+public int getDeathCount(){
+	return deathCount_;
+}
+
+	public boolean isDead() {
+		if(shipStatus_ == shipStatus.DEAD){
+			return true;
+		}
+		else
+		return false;
+	}
+
+
+	public void incrementDeathCount() {
+		deathCount_++;
+		
+	}
+
+
+}

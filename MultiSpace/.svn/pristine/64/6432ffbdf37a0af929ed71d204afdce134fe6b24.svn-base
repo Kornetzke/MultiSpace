@@ -1,0 +1,147 @@
+package unitTests;
+
+import static org.junit.Assert.*;
+
+
+
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import SpaceClient.SpaceShip;
+
+
+public class TestDrawable {
+	SpaceShip testDraw;
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+
+	@Before
+	public void setUp() throws Exception {
+		testDraw = new SpaceShip(2,50,152);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void testGetImageNumber() {
+		assertEquals("Should return the image number of 0", 0, testDraw.getImageNumber());
+	}
+
+	@Test
+	public void testSetDirection() {
+		testDraw.setDirection(1234);
+		assertEquals("Should return the direction of 1234",1234,testDraw.getDirection());
+	}
+
+	@Test
+	public void testGetDirection() {
+		testDraw.setDirection(1234);
+		assertEquals("Should return the direction of 1234",1234,testDraw.getDirection());
+	}
+
+		@Test
+	public void testGetX() {
+		testDraw.setX(123456);
+		assertEquals("Should return the x of 123456",123456.0,testDraw.getX(),0.0);
+	}
+
+	@Test
+	public void testGetmiddleX() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetmiddleY() {
+		System.out.println(testDraw.getmiddleY());
+		assertEquals("Should return the MiddleY of 123456",123456.0,testDraw.getY(),0.0);
+	}
+
+	@Test
+	public void testSetX() {
+		testDraw.setX(123456);
+		assertEquals("Should return the x of 123456",123456.0,testDraw.getX(),0.0);
+	}
+
+	@Test
+	public void testGetY() {
+		testDraw.setY(123456);
+		assertEquals("Should return the y of 123456",123456.0,testDraw.getY(),0.0);
+	}
+
+	@Test
+	public void testSetY() {
+		testDraw.setY(123456);
+		assertEquals("Should return the y of 123456",123456.0,testDraw.getY(),0.0);
+	}
+
+	@Test
+	public void testGetWidth() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetWidth() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetHeight() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetHeight() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetHitBox() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testUpdateMiddle() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testUpdateHitBox() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testIntersects() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetHitPoints() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetImageInt() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetPlacement() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testCycle() {
+		fail("Not yet implemented"); // TODO
+	}
+
+}

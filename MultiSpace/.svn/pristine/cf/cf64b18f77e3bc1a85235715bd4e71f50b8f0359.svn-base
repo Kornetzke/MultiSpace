@@ -1,0 +1,54 @@
+package unitTests;
+
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+public class TestHitBox {
+
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+
+	@Before
+	public void setUp() throws Exception {
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void testSetHitbox() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testUpdate() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetPolyPoints() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetPolygon() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testContains() {
+		fail("Not yet implemented"); // TODO
+	}
+
+}

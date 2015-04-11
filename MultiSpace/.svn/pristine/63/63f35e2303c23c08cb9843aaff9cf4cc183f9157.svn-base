@@ -1,0 +1,26 @@
+package SpaceClient;
+
+import javax.swing.ImageIcon;
+
+public class Loader {
+	private static Loader instance = null;
+
+	private Loader() {
+
+	}
+
+	public static void createLoader() {
+		if (instance == null)
+			instance = new Loader();
+	}
+
+	static ImageIcon[] iiarray = {
+
+	new ImageIcon(Board.class.getResource("Fighter150W.png")),
+			new ImageIcon(Board.class.getResource("LazerFix.png")),
+			new ImageIcon(Board.class.getResource("Space.png")),
+			new ImageIcon(Board.class.getResource("DaP.png")),
+
+	};
+
+}

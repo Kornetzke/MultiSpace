@@ -1,0 +1,311 @@
+package unitTests;
+
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import SpaceClient.SpaceShip;
+
+public class TestSpaceShip {
+SpaceShip testShip;
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+
+	@Before
+	public void setUp() throws Exception {
+		testShip = new SpaceShip(5,4,3);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void testSetPlacement() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testCycle() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetForward() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetLeft() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetRight() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetBreak() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetFire() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testComputeTurnDirection() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testAccelerate() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testMove() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testMoveMissile() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testApplySpaceBreak() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testRegenerateStats() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testCheckFire() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testIsChange() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testResetChange() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testToString() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetDx() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetDx() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetDy() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetDy() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetMissiles() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testIsFiring() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testFire() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetMouseLocation() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testIsChanged() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetChanged() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetName() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetMouseLocation() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testCheckIfWeaponHit() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetShipStatus() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetShipStatus() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetClientState() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetPlayerState() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetHealth() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetHealth() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testIncrementHealth() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetName() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetMaxHealth() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetMaxHealth() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetShield() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetShield() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetMaxShield() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetMaxShield() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetEnergy() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetEnergy() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testGetMaxEnergy() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetMaxEnergy() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testSetHitBox() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testRemoveMissile() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	@Test
+	public void testRespawn() { //CANT TEST DUE TO HANDLER
+		/*testShip.setHealth(10);
+		testShip.setEnergy(10);
+		testShip.setShield(0);
+		testShip.setShipStatus("dead");
+		testShip.respawn();
+		assertEquals("The ship should have Reset",false ,testShip.isDead());
+	*/}
+
+	@Test
+	public void testGetDeathCount() {
+		assertEquals("Ship should have no deaths", 0,testShip.getDeathCount());
+		testShip.incrementDeathCount();
+		assertEquals("Ship should have 1 death",1,testShip.getDeathCount());
+	}
+
+	@Test
+	public void testIsDead() {
+		assertEquals("Should return false",false,testShip.isDead());
+		testShip.setShipStatus("Dead");
+		assertEquals("Should return true",true,testShip.isDead());
+	}
+	@Test
+	public void testIncrementDeathCount(){
+		assertEquals("Ship should have no deaths", 0,testShip.getDeathCount());
+		testShip.incrementDeathCount();
+		assertEquals("Ship should have 1 death",1,testShip.getDeathCount());
+	}
+}

@@ -1,0 +1,22 @@
+package SpaceClient;
+
+/**
+ * This class are all non player controlled objects that are drawn (minus
+ * missiles).
+ * 
+ * @author Kyle Kornetzke
+ * 
+ */
+public class SpaceJunk extends Drawable {
+
+	public SpaceJunk(int facePaint, double x, double y) {
+		super(facePaint, x, y);
+
+	}
+
+	@Override
+	public void cycle() {
+
+	}
+
+}

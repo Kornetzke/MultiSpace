@@ -1,0 +1,126 @@
+package menu;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+
+import SpaceClient.Board;
+
+public class GameTextField {
+
+	private Rectangle edge_;
+	private Rectangle inner_;
+	private Color outside_;
+	private final int BORDER = 6;
+	private Color inside_;
+	private String text_;
+	private String origText_;
+	private boolean beenClicked = false;
+
+	public GameTextField(Point location, Color outsideColor, String text) {
+		edge_ = new Rectangle(location.x, location.y, (Board.width / 3),
+				(Board.height / 20));
+		inner_ = new Rectangle(location.x + (BORDER / 2), location.y
+				+ (BORDER / 2), (Board.width / 3 - BORDER),
+				(Board.height / 20 - BORDER));
+		outside_ = outsideColor;
+		inside_ = Color.lightGray;
+		text_ = text;
+		origText_ = text;
+	}
+
+	public void changeOutsideColor(Color color) {
+		outside_ = color;
+	}
+
+	public void draw(Graphics g2d) {
+
+		g2d.setColor(outside_);
+		g2d.fillRect(edge_.x, edge_.y, edge_.width, edge_.height);
+		g2d.setColor(inside_);
+		g2d.fillRect(inner_.x, inner_.y, inner_.width, inner_.height);
+		g2d.setColor(Color.black);
+		if (Board.height < Board.width)
+			g2d.setFont(new Font(Font.SANS_SERIF, Font.ITALIC,
+					Board.height / 35));
+		else
+			g2d.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, Board.width / 35));
+		g2d.drawString(text_,
+				inner_.x + (inner_.width / 2) - (g2d.getFont().getSize()) * 2,
+				inner_.y + (inner_.height / 2) * 2);
+
+		g2d.setColor(Color.white);
+		g2d.drawString(origText_, edge_.x - g2d.getFont().getSize() * 5,
+				edge_.y + g2d.getFont().getSize());
+	}
+
+	public void setString(String newString) {
+		text_ = newString;
+	}
+
+	public void update(Point point) {
+		edge_.setBounds(new Rectangle(point.x, point.y, (Board.width / 3),
+				(Board.height / 20)));
+		inner_.setBounds(new Rectangle(point.x + (BORDER / 2), point.y
+				+ (BORDER / 2), (Board.width / 3 - BORDER), (Board.height / 20)
+				- BORDER));
+		if (inside_ == Color.yellow && beenClicked == false) {
+			beenClicked = true;
+			text_ = "";
+		}
+
+	}
+
+	public void clicked() {
+		if (text_.compareToIgnoreCase(origText_) == 0) {
+			text_ = "";
+		}
+	}
+
+	public boolean contain(Point click) {
+		if (inner_.contains(click)) {
+			return true;
+		} else
+			return false;
+	}
+
+	public void changeInsideColor(Color color) {
+		inside_ = color;
+	}
+
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+			if (text_.length() == 0) {
+				return;
+			}
+			String temp = text_.substring(0, text_.length() - 1);
+			text_ = temp;
+		} else if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+			return;
+		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			return;
+		} else {
+			if (text_.length() < 25) {
+				char typed = e.getKeyChar();
+				text_ = text_.concat("" + typed);
+			}
+		}
+	}
+	public Color getInsideColor() {
+		return inside_;
+	}
+	public Color getOutsideColor() {
+		return this.outside_;
+	}
+	
+	public String getText() {
+		return text_;
+	}
+
+	public String toString(){
+		return this.edge_.x+" "+this.edge_.y;
+	}
+}
