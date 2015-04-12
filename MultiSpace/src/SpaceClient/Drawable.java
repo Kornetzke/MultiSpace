@@ -21,7 +21,7 @@ public abstract class Drawable {
 	 * ii is the ImageIcon for the Drawable object and used when getting the
 	 * Image of the object
 	 */
-	protected ImageIcon ii;
+	protected ImageIcon imageIcon;
 
 	/**
 	 * image is the Image for the Drawable object and is used when painting the
@@ -85,10 +85,10 @@ public abstract class Drawable {
 	 */
 	public Drawable(int iiNumber, double x, double y) {
 		imageNumber = iiNumber;
-		this.ii = Board.iiarray[imageNumber];
-		this.image = ii.getImage();
-		height = ii.getIconHeight();
-		width = ii.getIconWidth();
+		this.imageIcon = Board.imageIconArray[imageNumber];
+		this.image = imageIcon.getImage();
+		height = imageIcon.getIconHeight();
+		width = imageIcon.getIconWidth();
 		this.x = x;
 		this.y = y;
 		this.direction = new Direction(0);
@@ -207,9 +207,9 @@ public abstract class Drawable {
 
 	public void setImage(int newImageNumber) {
 		imageNumber = newImageNumber;
-		this.ii = Board.iiarray[imageNumber];
-		this.image = ii.getImage();
-		this.width = ii.getIconWidth();
+		this.imageIcon = Board.imageIconArray[imageNumber];
+		this.image = imageIcon.getImage();
+		this.width = imageIcon.getIconWidth();
 		updateMiddle();
 
 	}

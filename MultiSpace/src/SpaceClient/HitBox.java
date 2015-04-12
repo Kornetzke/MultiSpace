@@ -12,25 +12,25 @@ import java.awt.geom.AffineTransform;
  */
 public class HitBox {
 
-	private Point[] hitBoxPoints_;
-	private int numberOfPoints_;
+	private Point[] hitBoxPoints;
+	private int numberOfPoints;
 
-	private Polygon hitBoxPoly_;
-	private Point middle_;
+	private Polygon hitBoxPoly;
+	private Point middle;
 /**
  * Main Constructor of Hitbox
  * @param points: array of points of the hitbox
  * @param middle: middle point of the hitbox
  */
 	public HitBox(Point[] points, Point middle) {
-		hitBoxPoly_ = new Polygon();
-		hitBoxPoints_ = new Point[points.length];
-		numberOfPoints_ = points.length;
-		middle_ = new Point(middle);
+		hitBoxPoly = new Polygon();
+		hitBoxPoints = new Point[points.length];
+		numberOfPoints = points.length;
+		this.middle = new Point(middle);
 
 		for (int i = 0; i < points.length; i++) {
-			hitBoxPoints_[i] = new Point(points[i]);
-			hitBoxPoly_.addPoint(points[i].x, points[i].y);
+			hitBoxPoints[i] = new Point(points[i]);
+			hitBoxPoly.addPoint(points[i].x, points[i].y);
 		}
 
 	}
@@ -41,14 +41,14 @@ public class HitBox {
  */
 	public void setHitbox(Point[] points, Point middle) {
 
-		hitBoxPoints_ = new Point[points.length];
-		numberOfPoints_ = points.length;
-		middle_.setLocation(middle);
-		hitBoxPoly_ = new Polygon();
+		hitBoxPoints = new Point[points.length];
+		numberOfPoints = points.length;
+		this.middle.setLocation(middle);
+		hitBoxPoly = new Polygon();
 
 		for (int i = 0; i < points.length; i++) {
-			hitBoxPoints_[i] = new Point(points[i]);
-			hitBoxPoly_.addPoint(points[i].x, points[i].y);
+			hitBoxPoints[i] = new Point(points[i]);
+			hitBoxPoly.addPoint(points[i].x, points[i].y);
 		}
 
 	}
@@ -59,24 +59,24 @@ public class HitBox {
  */
 	public void update(Point newmiddle, int dir) {
 
-		Point[] changedhitBoxPoints_ = new Point[hitBoxPoints_.length];
+		Point[] changedhitBoxPoints_ = new Point[hitBoxPoints.length];
 
-		for (int i = 0; i < hitBoxPoints_.length; i++) {
-			changedhitBoxPoints_[i] = new Point(hitBoxPoints_[i]);
+		for (int i = 0; i < hitBoxPoints.length; i++) {
+			changedhitBoxPoints_[i] = new Point(hitBoxPoints[i]);
 		}
 
-		hitBoxPoly_ = new Polygon();
+		hitBoxPoly = new Polygon();
 
-		AffineTransform.getRotateInstance(Math.toRadians(-dir), middle_.x,
-				middle_.y).transform(hitBoxPoints_, 0, changedhitBoxPoints_, 0,
-				numberOfPoints_);
+		AffineTransform.getRotateInstance(Math.toRadians(-dir), middle.x,
+				middle.y).transform(hitBoxPoints, 0, changedhitBoxPoints_, 0,
+				numberOfPoints);
 
 		for (int i = 0; i < changedhitBoxPoints_.length; i++) {
-			hitBoxPoly_.addPoint(changedhitBoxPoints_[i].x,
+			hitBoxPoly.addPoint(changedhitBoxPoints_[i].x,
 					changedhitBoxPoints_[i].y);
 		}
 
-		hitBoxPoly_.translate(newmiddle.x - middle_.x, newmiddle.y - middle_.y);
+		hitBoxPoly.translate(newmiddle.x - middle.x, newmiddle.y - middle.y);
 
 	}
 /**
@@ -84,10 +84,10 @@ public class HitBox {
  * @return polygon's points
  */
 	public Point[] getPolyPoints() {
-		Point[] temp = new Point[numberOfPoints_];
+		Point[] temp = new Point[numberOfPoints];
 
-		int[] xPoints = hitBoxPoly_.xpoints;
-		int[] yPoints = hitBoxPoly_.ypoints;
+		int[] xPoints = hitBoxPoly.xpoints;
+		int[] yPoints = hitBoxPoly.ypoints;
 
 		for (int i = 0; i < temp.length; i++) {
 			temp[i] = new Point(xPoints[i], yPoints[i]);
@@ -100,7 +100,7 @@ public class HitBox {
  * @return polygon of the hitbox
  */
 	public Polygon getPolygon() {
-		return hitBoxPoly_;
+		return hitBoxPoly;
 	}
 /**
  * Checks to see if any of the points in the array of 'points' are in the polygon of hitbox
@@ -110,7 +110,7 @@ public class HitBox {
 	public boolean contains(Point[] points) {
 
 		for (int i = 0; i < points.length; i++) {
-			if (hitBoxPoly_.contains(points[i]))
+			if (hitBoxPoly.contains(points[i]))
 				return true;
 		}
 

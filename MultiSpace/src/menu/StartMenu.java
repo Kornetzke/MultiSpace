@@ -16,9 +16,9 @@ import SpaceClient.Board.GameState;
  * 
  */
 public class StartMenu {
-	private GameButton joinMatch_;
-	private GameButton exit_;
-	private Point joinPoint_;
+	private GameButton joinMatch;
+	private GameButton exit;
+	private Point joinPoint;
 
 	private Point exitPoint_;
 
@@ -37,14 +37,14 @@ public class StartMenu {
 		int startY = Board.height / 2 - Board.height / 20;
 		int startX = Board.width / 2 - Board.width / 8;
 		int differenceInY = Board.width / 8 + 4;
-		joinPoint_ = new Point(startX, startY);
+		joinPoint = new Point(startX, startY);
 
 		exitPoint_ = new Point(startX, startY + (3 * differenceInY));
 
-		joinMatch_ = new GameButton(joinPoint_, outterColor_, innerColor_,
+		joinMatch = new GameButton(joinPoint, outterColor_, innerColor_,
 				"Join Match");
 
-		exit_ = new GameButton(exitPoint_, outterColor_, innerColor_,
+		exit = new GameButton(exitPoint_, outterColor_, innerColor_,
 				"Exit Game");
 	}
 /**
@@ -54,9 +54,9 @@ public class StartMenu {
 		int startY = Board.height / 2 - Board.height / 20;
 		int startX = Board.width / 2 - Board.width / 8;
 		int differenceInY = Board.height / 10 + 2;
-		joinMatch_.update(new Point(startX, startY + (2 * differenceInY)));
-		joinPoint_ = new Point(startX, startY + (2 * differenceInY));
-		exit_.update(new Point(startX, startY + (3 * differenceInY)));
+		joinMatch.update(new Point(startX, startY + (2 * differenceInY)));
+		joinPoint = new Point(startX, startY + (2 * differenceInY));
+		exit.update(new Point(startX, startY + (3 * differenceInY)));
 		exitPoint_ = new Point(startX, startY + (3 * differenceInY)); 
 
 	}
@@ -86,9 +86,9 @@ public class StartMenu {
 				- (g2d.getFont().getSize() * 2), Board.height / 10
 				+ (g2d.getFont().getSize() * 5));
 
-		joinMatch_.draw(g2d);
+		joinMatch.draw(g2d);
 
-		exit_.draw(g2d);
+		exit.draw(g2d);
 	}
 /**
  * Mouse clicked calls this method.  It does the appropriate commands for each button.
@@ -97,12 +97,12 @@ public class StartMenu {
 	public void mouseClicked(MouseEvent e) {
 
 		Point click = e.getPoint();
-		if (joinMatch_.contain(click)) {
-			Board.gameStatus_ = GameState.MODIFYMENU;
+		if (joinMatch.contain(click)) {
+			Board.gameStatus = GameState.MODIFYMENU;
 
 		}
 
-		if (exit_.contain(click)) {
+		if (exit.contain(click)) {
 			System.exit(0);
 		}
 	}
@@ -113,15 +113,15 @@ public class StartMenu {
 	public void mouseMoved(MouseEvent e) {
 		Point p = e.getPoint();
 
-		if (joinMatch_.contain(p)) {
-			joinMatch_.changeInsideColor(Color.black);
+		if (joinMatch.contain(p)) {
+			joinMatch.changeInsideColor(Color.black);
 		} else {
-			joinMatch_.changeInsideColor(Color.red);
+			joinMatch.changeInsideColor(Color.red);
 		}
-		if (exit_.contain(p)) {
-			exit_.changeInsideColor(Color.black);
+		if (exit.contain(p)) {
+			exit.changeInsideColor(Color.black);
 		} else {
-			exit_.changeInsideColor(Color.red);
+			exit.changeInsideColor(Color.red);
 		}
 
 	}
@@ -130,7 +130,7 @@ public class StartMenu {
 	 * @return location of join button
 	 */
 	public Point getJoinPoint(){
-		return joinPoint_;
+		return joinPoint;
 	}
 	/**
 	 * Gets the location of exit button.  For testing purposes only

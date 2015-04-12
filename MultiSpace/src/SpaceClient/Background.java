@@ -10,22 +10,22 @@ import java.awt.Point;
  * 
  */
 public class Background extends Drawable {
-	private Point[][] background_;
+	private Point[][] background;
 /**
  * Default constructor of background.  Sets up the array of background stars.
  */
 	public Background() {
 		super(2, 0, 0);
-		background_ = new Point[3][3];
-		background_[0][0] = new Point(-3000, -3000);
-		background_[0][1] = new Point(0, -3000);
-		background_[0][2] = new Point(3000, -3000);
-		background_[1][0] = new Point(-3000, 0);
-		background_[1][1] = new Point(0, 0);
-		background_[1][2] = new Point(3000, 3000);
-		background_[2][0] = new Point(-3000, 3000);
-		background_[2][1] = new Point(0, 3000);
-		background_[2][2] = new Point(3000, 3000);
+		background = new Point[3][3];
+		background[0][0] = new Point(-3000, -3000);
+		background[0][1] = new Point(0, -3000);
+		background[0][2] = new Point(3000, -3000);
+		background[1][0] = new Point(-3000, 0);
+		background[1][1] = new Point(0, 0);
+		background[1][2] = new Point(3000, 3000);
+		background[2][0] = new Point(-3000, 3000);
+		background[2][1] = new Point(0, 3000);
+		background[2][2] = new Point(3000, 3000);
 	}
 /**
  * Updates the star array for the player's location
@@ -33,8 +33,8 @@ public class Background extends Drawable {
  * @param playerY: location of player (Y coordinate)
  */
 	public void update(double playerX, double playerY) {
-		double moveX = playerX - background_[1][1].x;
-		double moveY = playerY - background_[1][1].y;
+		double moveX = playerX - background[1][1].x;
+		double moveY = playerY - background[1][1].y;
 
 		boolean moveBoardX = false;
 		boolean moveBoardY = false;
@@ -49,13 +49,13 @@ public class Background extends Drawable {
 			if (moveX <= 0) {
 				for (int i = 0; i < 3; i++) {
 					for (int j = 0; j < 3; j++) {
-						background_[i][j].x = background_[i][j].x - 3000;
+						background[i][j].x = background[i][j].x - 3000;
 					}
 				}
 			} else
 				for (int i = 0; i < 3; i++) {
 					for (int j = 0; j < 3; j++) {
-						background_[i][j].x = background_[i][j].x + 3000;
+						background[i][j].x = background[i][j].x + 3000;
 					}
 				}
 		}
@@ -64,13 +64,13 @@ public class Background extends Drawable {
 			if (moveY <= 0) {
 				for (int i = 0; i < 3; i++) {
 					for (int j = 0; j < 3; j++) {
-						background_[i][j].y = background_[i][j].y - 3000;
+						background[i][j].y = background[i][j].y - 3000;
 					}
 				}
 			} else
 				for (int i = 0; i < 3; i++) {
 					for (int j = 0; j < 3; j++) {
-						background_[i][j].y = background_[i][j].y + 3000;
+						background[i][j].y = background[i][j].y + 3000;
 					}
 				}
 		}
@@ -88,7 +88,7 @@ public class Background extends Drawable {
 	 * @return 2d array of Points
 	 */
 	public Point[][] getBackgroundPoints(){
-		return background_;
+		return background;
 	}
 /**
  * Paints the background array
@@ -96,8 +96,8 @@ public class Background extends Drawable {
 	public void paint(Graphics2D g2d, double dx, double dy) {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++)
-				g2d.drawImage(image, (int) (background_[i][j].x - dx),
-						(int) (background_[i][j].y - dy), null);
+				g2d.drawImage(image, (int) (background[i][j].x - dx),
+						(int) (background[i][j].y - dy), null);
 		}
 	}
 

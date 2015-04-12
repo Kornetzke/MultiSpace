@@ -17,27 +17,27 @@ import SpaceClient.Board.GameState;
  * @author Kyle Kornetzke
  * 
  */
-public class Handler extends Thread {
-	private BufferedReader in_;
-	private PrintWriter out_;
-	private Socket socket_;
-	private String serverAddress_;
-	private int port_;
-	private boolean gameReady_ = false;
+public class NetworkCommunicationHandler extends Thread {
+	private BufferedReader in;
+	private PrintWriter out;
+	private Socket socket;
+	private String serverAddress;
+	private int port;
+	private boolean gameReady = false;
 
-	public Handler(String string) {
+	public NetworkCommunicationHandler(String string) {
 		String[] input = string.split(":");
 		if (input[0].compareTo("Server IP") == 0) {
-			serverAddress_ = "localhost";
+			serverAddress = "localhost";
 		} else
-			serverAddress_ = input[0];
+			serverAddress = input[0];
 		if (input.length > 1)
-			port_ = Integer.parseInt(input[1]);
+			port = Integer.parseInt(input[1]);
 		else
-			port_ = 9001;
+			port = 9001;
 	}
 
-	public Handler() {
+	public NetworkCommunicationHandler() {
 
 	}
 
@@ -49,19 +49,19 @@ public class Handler extends Thread {
 	 */
 
 	public void sendToServer(String out) {
-		if (gameReady_)
-			this.out_.println(out);
+		if (gameReady)
+			this.out.println(out);
 	}
 
 	public void run() {
 
 		// Make connection and initialize streams
-		socket_ = null;
+		socket = null;
 		try {
-			socket_ = new Socket(serverAddress_, port_);
-			in_ = new BufferedReader(new InputStreamReader(
-					socket_.getInputStream()));
-			out_ = new PrintWriter(socket_.getOutputStream(), true);
+			socket = new Socket(serverAddress, port);
+			in = new BufferedReader(new InputStreamReader(
+					socket.getInputStream()));
+			out = new PrintWriter(socket.getOutputStream(), true);
 
 		} catch (UnknownHostException e) {
 			System.out.println("UnknownHost");
@@ -69,7 +69,7 @@ public class Handler extends Thread {
 			e.printStackTrace();
 		} catch (IOException e) {
 			System.out.println("IO----Exception");
-			Board.gameStatus_ = Board.GameState.STARTMENU;
+			Board.gameStatus = Board.GameState.STARTMENU;
 			return;
 		}
 
@@ -77,11 +77,11 @@ public class Handler extends Thread {
 		while (true) { // Connection to the server while loop
 			String input = null;
 			try {
-				input = in_.readLine();
+				input = in.readLine();
 			} catch (IOException e) {
 				System.out.println("Connection to server lost");
 				try {
-					socket_.close();
+					socket.close();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -95,10 +95,10 @@ public class Handler extends Thread {
 				break;
 			}
 			if (input.startsWith("SUBMITNAME")) {
-				out_.println(GamePlay.getPlayer().getName());
+				out.println(GamePlay.getPlayer().getName());
 
 			} else if (input.startsWith("NEEDSHIP")) {
-				out_.println(GamePlay.getPlayer().x + ":"
+				out.println(GamePlay.getPlayer().x + ":"
 						+ GamePlay.getPlayer().y + ":"
 						+ GamePlay.getPlayer().getDirection() + ":"
 						+ GamePlay.getPlayer().getImageNumber());
@@ -111,12 +111,12 @@ public class Handler extends Thread {
 								.parseDouble(inArray[2])));
 
 			} else if (input.startsWith("STARTGAME")) {
-				gameReady_ = true;
-				Board.gameStatus_ = GameState.GAME;
+				gameReady = true;
+				Board.gameStatus = GameState.GAME;
 				break; // breaks out of the while loop once connection has
 						// been successful
 			} else if (input.startsWith("NAMEREJECTED")) {
-				Board.modifyMenu_.nameReject();
+				Board.modifyMenu.nameReject();
 			}
 
 		} // end of while loop for connection information
@@ -125,11 +125,11 @@ public class Handler extends Thread {
 						// the server
 			String input;
 			try {
-				input = in_.readLine();
+				input = in.readLine();
 			} catch (IOException e) {
 				System.out.println("Connection to server lost");
 				try {
-					socket_.close();
+					socket.close();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -142,11 +142,11 @@ public class Handler extends Thread {
 				break;
 			}
 			if (input.startsWith("DISCONNECTED")) {
-				gameReady_ = false;
+				gameReady = false;
 				System.out.println("You have been disconnected");
-				Board.gameStatus_ = Board.GameState.STARTMENU;
+				Board.gameStatus = Board.GameState.STARTMENU;
 				try {
-					socket_.close();
+					socket.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -165,7 +165,20 @@ public class Handler extends Thread {
 				System.out.println("Ship added! " + inArray[1] + " "
 						+ inArray[2] + " " + inArray[3] + " " + inArray[4]);
 
-			} else // end of "Add"
+			} // end of Add:Player
+			
+			else if (input.startsWith("RemovePlayer")) {
+				String[] inArray = input.split(":");
+
+				synchronized(GamePlay.getPlayerHashTable()){
+				GamePlay.getPlayerHashTable().remove(inArray[1]);
+				}
+
+				System.out.println("Ship Removed! " + inArray[1]);
+
+			} // End of Remove:PlayerName	
+			
+			else // end of "Add"
 
 			if (input.startsWith("Change")) {
 				String[] inArray = input.split(":");
@@ -241,7 +254,7 @@ public class Handler extends Thread {
 	 * @return fals
 	 */
 	public boolean isGameReady() {
-		return gameReady_;
+		return gameReady;
 	}
 
 } // end of Handler class;

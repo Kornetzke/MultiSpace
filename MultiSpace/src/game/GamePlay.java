@@ -15,7 +15,7 @@ import menu.GameButton;
 import SpaceClient.Background;
 import SpaceClient.Board;
 import SpaceClient.Drawable;
-import SpaceClient.Handler;
+import SpaceClient.NetworkCommunicationHandler;
 import SpaceClient.SpaceShip;
 
 /**
@@ -25,15 +25,15 @@ import SpaceClient.SpaceShip;
  * 
  */
 public class GamePlay {
-	public static Handler handler;
-	private Background backgroundImage_;
-	private static SpaceShip player_; // Object that the player will control.
-	private GameButton deadButton_;
-	private static List<Drawable> space_ = new ArrayList<Drawable>();
+	public static NetworkCommunicationHandler handler;
+	private Background backgroundImage;
+	private static SpaceShip player; // Object that the player will control.
+	private GameButton deadButton;
+	private static List<Drawable> spaceDrawableList = new ArrayList<Drawable>();
 
-	private static Hashtable<String, SpaceShip> playerHashTable_ = new Hashtable<String, SpaceShip>();
+	private static Hashtable<String, SpaceShip> playerHashTable = new Hashtable<String, SpaceShip>();
 
-	private double displacePaintX_, displacePaintY_; // Displacement for the x
+	private double pantDisplacementX, pantDisplacementY; // Displacement for the x
 														// and
 														// y value for drawing
 														// other
@@ -52,20 +52,20 @@ public class GamePlay {
 	 * 
 	 */
 	public GamePlay() {
-		deadButton_ = new GameButton(new Point(Board.width / 2,
+		deadButton = new GameButton(new Point(Board.width / 2,
 				Board.height / 2 + 100), Color.red, Color.WHITE, "RESPAWN");
 
-		backgroundImage_ = new Background();
+		backgroundImage = new Background();
 
-		player_ = new SpaceShip(0, (int) (Math.random() * 1000),
+		player = new SpaceShip(0, (int) (Math.random() * 1000),
 				(int) (Math.random() * 1000));
 
-		player_.setName("Kyle" + (int) (Math.random() * 1000));
+		player.setName("Kyle" + (int) (Math.random() * 1000));
 
 	}
 
 	public GamePlay(String test) {
-		handler = new Handler();
+		handler = new NetworkCommunicationHandler();
 	}
 
 	/**
@@ -81,19 +81,19 @@ public class GamePlay {
 	public void keyPressed(KeyEvent e) {
 
 		if (e.getKeyCode() == 65) {
-			player_.setLeft(true);
+			player.setLeft(true);
 		}
 		if (e.getKeyCode() == 68) {
-			player_.setRight(true);
+			player.setRight(true);
 		}
 		if (e.getKeyCode() == 87) {
-			player_.setForward(true);
+			player.setForward(true);
 		}
 		if (e.getKeyCode() == 83) {
-			player_.setBreak(true);
+			player.setBreak(true);
 		}
 		if (e.getKeyCode() == 32) {
-			player_.setFire(true);
+			player.setFire(true);
 		}
 
 	}
@@ -112,19 +112,19 @@ public class GamePlay {
 	public void keyReleased(KeyEvent e) {
 
 		if (e.getKeyCode() == 65) {
-			player_.setLeft(false);
+			player.setLeft(false);
 		}
 		if (e.getKeyCode() == 68) {
-			player_.setRight(false);
+			player.setRight(false);
 		}
 		if (e.getKeyCode() == 87) {
-			player_.setForward(false);
+			player.setForward(false);
 		}
 		if (e.getKeyCode() == 83) {
-			player_.setBreak(false);
+			player.setBreak(false);
 		}
 		if (e.getKeyCode() == 32) {
-			player_.setFire(false);
+			player.setFire(false);
 		}
 	}
 
@@ -142,10 +142,10 @@ public class GamePlay {
 	 * @precondition player is not null
 	 */
 	public void mousePressed(MouseEvent e) {
-		if (player_.isDead() && deadButton_.contain(e.getPoint())) {
-			player_.respawn();
+		if (player.isDead() && deadButton.contain(e.getPoint())) {
+			player.respawn();
 		}
-		player_.setFire(true);
+		player.setFire(true);
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class GamePlay {
 	 * @precondition Player is not null
 	 */
 	public void mouseReleased(MouseEvent e) {
-		player_.setFire(false);
+		player.setFire(false);
 	}
 
 	/**
@@ -173,13 +173,13 @@ public class GamePlay {
 	 *            - MouseEvent
 	 */
 	public void mouseMoved(MouseEvent e) {
-		if (player_.isDead()) {
-			if (deadButton_.contain(e.getPoint())) {
-				deadButton_.changeInsideColor(Color.black);
+		if (player.isDead()) {
+			if (deadButton.contain(e.getPoint())) {
+				deadButton.changeInsideColor(Color.black);
 			} else
-				deadButton_.changeInsideColor(Color.red);
+				deadButton.changeInsideColor(Color.red);
 		}
-		player_.setMouseLocation(e.getPoint());
+		player.setMouseLocation(e.getPoint());
 
 	}
 
@@ -191,7 +191,7 @@ public class GamePlay {
 	 *            - MouseEvent
 	 */
 	public void mouseDragged(MouseEvent e) {
-		player_.setMouseLocation(e.getPoint());
+		player.setMouseLocation(e.getPoint());
 
 	}
 
@@ -217,24 +217,24 @@ public class GamePlay {
 	 */
 	public void update() {
 
-		synchronized (playerHashTable_) {
-			for (SpaceShip x : playerHashTable_.values()) {
+		synchronized (playerHashTable) {
+			for (SpaceShip x : playerHashTable.values()) {
 				x.MoveMissile();
 				x.updateHitBox();
 
 			}
 		}
 
-		if (player_.isDead()) {
-			deadButton_.update(new Point(Board.width / 2,
+		if (player.isDead()) {
+			deadButton.update(new Point(Board.width / 2,
 					Board.height / 2 + 100));
 
 		} else {
-			player_.cycle();
+			player.cycle();
 			HitCheck();
 		}
 
-		backgroundImage_.update(player_.middle.x, player_.middle.y);
+		backgroundImage.update(player.middle.x, player.middle.y);
 
 	}
 
@@ -246,9 +246,9 @@ public class GamePlay {
 	 * @preconditions player is not null
 	 */
 	public void HitCheck() {
-		synchronized (playerHashTable_) {
-			for (SpaceShip x : playerHashTable_.values()) {
-				x.checkIfWeaponHit(player_);
+		synchronized (playerHashTable) {
+			for (SpaceShip x : playerHashTable.values()) {
+				x.checkIfWeaponHit(player);
 			}
 		}
 
@@ -286,28 +286,30 @@ public class GamePlay {
 			return;
 		}
 
-		displacePaintX_ = player_.getmiddleX() - (Board.width / 2);
-		displacePaintY_ = player_.getmiddleY() - (Board.height / 2);
+		pantDisplacementX = player.getmiddleX() - (Board.width / 2);
+		pantDisplacementY = player.getmiddleY() - (Board.height / 2);
 
-		backgroundImage_.paint(g2d, displacePaintX_, displacePaintY_);
+		backgroundImage.paint(g2d, pantDisplacementX, pantDisplacementY);
 
-		for (Drawable x : space_) {
-			if (Math.abs(player_.getX() - x.getX()) <= 3000
-					&& Math.abs(player_.getY() - x.getY()) <= 3000)
-				x.paint(g2d, displacePaintX_, displacePaintY_);
+		for (Drawable x : spaceDrawableList) {
+			if (Math.abs(player.getX() - x.getX()) <= 3000
+					&& Math.abs(player.getY() - x.getY()) <= 3000)
+				x.paint(g2d, pantDisplacementX, pantDisplacementY);
+
 		}
 
-		synchronized (playerHashTable_) {
-			for (SpaceShip x : playerHashTable_.values()) {
-				x.paint(g2d, displacePaintX_, displacePaintY_);
+		synchronized (playerHashTable) {
+			for (SpaceShip x : playerHashTable.values()) {
+				x.paint(g2d, pantDisplacementX, pantDisplacementY);
+				
 				drawRadar(g2d, x.getmiddleX(), x.getmiddleY());
 			}
 		}
-		player_.paint(g2d, displacePaintX_, displacePaintY_);
+		player.paint(g2d, pantDisplacementX, pantDisplacementY);
 
 		drawUI(g2d);
 
-		if (player_.isDead()) {
+		if (player.isDead()) {
 			g2d.setColor(new Color(0f, 0f, 0f, .5f));
 			g2d.fillRect(0, 0, Board.width, Board.height);
 			g2d.setColor(Color.white);
@@ -316,9 +318,9 @@ public class GamePlay {
 			g2d.drawString("YOU ARE DEAD", Board.width / 2 - 4
 					* g2d.getFont().getSize(), Board.height / 2
 					- g2d.getFont().getSize());
-			g2d.drawString("Deaths: " + player_.getDeathCount(), Board.width
+			g2d.drawString("Deaths: " + player.getDeathCount(), Board.width
 					/ 2 - 4 * g2d.getFont().getSize(), Board.height / 2);
-			deadButton_.draw(g2d);
+			deadButton.draw(g2d);
 		}
 
 	}
@@ -354,7 +356,7 @@ public class GamePlay {
 		g2d.fillRoundRect(
 				0,
 				0,
-				(int) (UIwidth * (player_.getHealth() / player_.getMaxHealth())),
+				(int) (UIwidth * (player.getHealth() / player.getMaxHealth())),
 				UIheight / 3, 10, 10);
 
 		g2d.setColor(Color.BLUE);
@@ -362,7 +364,7 @@ public class GamePlay {
 		g2d.fillRoundRect(
 				0,
 				UIheight / 3 + 1,
-				(int) (UIwidth * (player_.getShield() / player_.getMaxShield())),
+				(int) (UIwidth * (player.getShield() / player.getMaxShield())),
 				UIheight / 3, 10, 10);
 
 		g2d.setColor(Color.MAGENTA);
@@ -371,39 +373,59 @@ public class GamePlay {
 		g2d.fillRoundRect(
 				0,
 				(UIheight * 2) / 3 + 1,
-				(int) (UIwidth * (player_.getEnergy() / player_.getMaxEnergy())),
+				(int) (UIwidth * (player.getEnergy() / player.getMaxEnergy())),
 				UIheight / 3, 10, 10);
 
 	}
-	
-	public void drawRadar(Graphics2D g2d, int oppositionMiddleX, int oppositionMiddleY){
+/**
+ * This method will draw a radar indicator based on opponent players middle x and y position. The 
+ *  
+ * @param g2d
+ * @param oppenentMiddleX
+ * @param opponentMiddleY
+ */
+	public void drawRadar(Graphics2D g2d, double oppenentMiddleX,	double opponentMiddleY ) {
+
 		int boardMiddleX = Board.width/2;
 		int boardMiddleY = Board.height/2;
-		int lineThickness = 2;
+		double lineThickness = 1.5;
+		double magnitude = 2;
+		int arcAngle = 40;
+		double angle;
 		double distance;
-		double magnitude;
-		int archAngle = 40;
 		
-		distance = Math.sqrt(Math.pow(player_.getmiddleX() - oppositionMiddleX, 2)
-				+ Math.pow(player_.getmiddleY() - oppositionMiddleY, 2));
+
+		g2d.rotate(
+				-(Math.atan2((double)player.getmiddleX() - oppenentMiddleX,
+						(double)player.getmiddleY() - opponentMiddleY)),
+						boardMiddleX,boardMiddleY);
 		
-		magnitude = 900/distance;
 		
+		distance = Math.sqrt(Math.pow(
+				Math.abs(player.getmiddleX() - oppenentMiddleX), 2)
+				+ Math.pow(Math.abs(player.getmiddleY() - opponentMiddleY), 2));
+
+		magnitude = 900 / distance;
+
 		magnitude = (magnitude > 1) ? 1 : magnitude;
 		magnitude = (magnitude < 0.025) ? 0.025 : magnitude;
+
+
+		angle = arcAngle * magnitude;
+
+		g2d.setStroke(new BasicStroke((float)lineThickness));
 		
-		
-		g2d.rotate(-Math.atan2(player_.getmiddleX() - oppositionMiddleX, player_.getmiddleY() - oppositionMiddleY),
-				boardMiddleX, boardMiddleY);
-		g2d.setStroke(new BasicStroke(lineThickness));
 		g2d.setColor(Color.YELLOW);
-		
-		g2d.drawArc(boardMiddleX - 150, boardMiddleY - 150, 300, 300, 90-(int)(magnitude*archAngle/2), (int)(magnitude*archAngle));
-		g2d.drawLine(boardMiddleX-lineThickness/2, boardMiddleY-149, boardMiddleX-lineThickness/2, boardMiddleY-150+(int)(magnitude*archAngle));
-		
-		g2d.rotate(Math.atan2(player_.getmiddleX() - oppositionMiddleX, player_.getmiddleY() - oppositionMiddleY),
-				boardMiddleX, boardMiddleY);
-		
+		g2d.drawArc(boardMiddleX - 150, boardMiddleY - 150, 300, 300, (int)(90 - (angle / 2)), (int)angle);
+		g2d.drawLine((int)(boardMiddleX-lineThickness/2), boardMiddleY-148, (int)(boardMiddleX-lineThickness/2), (int)(boardMiddleY-150+angle+300));
+
+
+		g2d.rotate(
+				(Math.atan2(player.getmiddleX() - oppenentMiddleX,
+						player.getmiddleY() - opponentMiddleY)),
+						boardMiddleX, boardMiddleY);
+
+
 	}
 
 	/**
@@ -412,7 +434,7 @@ public class GamePlay {
 	 * @return Spaceship Hash Table
 	 */
 	public static Hashtable<String, SpaceShip> getPlayerHashTable() {
-		return playerHashTable_;
+		return playerHashTable;
 	}
 
 	/**
@@ -421,7 +443,7 @@ public class GamePlay {
 	 * @return player's ship
 	 */
 	public static SpaceShip getPlayer() {
-		return player_;
+		return player;
 	}
 
 	/**
@@ -430,7 +452,7 @@ public class GamePlay {
 	 * @return list of space items (planets)
 	 */
 	public static List<Drawable> getSpaceList() {
-		return space_;
+		return spaceDrawableList;
 	}
 
 	/**
@@ -441,7 +463,7 @@ public class GamePlay {
 	 */
 	public void startHandler(String string) {
 
-		handler = new Handler(string);
+		handler = new NetworkCommunicationHandler(string);
 		handler.start();
 	}
 
@@ -452,7 +474,7 @@ public class GamePlay {
 	 *            of Space Objects
 	 */
 	public static void setSpaceList(List<Drawable> list) {
-		space_ = list;
+		spaceDrawableList = list;
 
 	}
 
@@ -462,7 +484,7 @@ public class GamePlay {
 	 * @param spaceShip
 	 */
 	public static void setPlayer(SpaceShip ship) {
-		player_ = ship;
+		player = ship;
 
 	}
 
@@ -473,7 +495,7 @@ public class GamePlay {
 	 *            of players
 	 */
 	public static void setPlayerHashTable(Hashtable<String, SpaceShip> hash) {
-		playerHashTable_ = hash;
+		playerHashTable = hash;
 
 	}
 

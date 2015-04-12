@@ -218,10 +218,23 @@ public class SpaceServer {
 		public void updateClients() {
 			String names = "";
 			String left = "";
-			for (Handler x : HandlerVector) {
+			boolean trimNeeded = false;
+			for (Handler x : HandlerVector) {				
 				names = names + x.toString() + "\n";
 				left = left + x.getMessage() + "\n";
+			
+				if(x.socket.isClosed()){
+					HandlerVector.remove(x);
+					trimNeeded = true;
+					break;
+				}
+			
 			}
+			
+			if(trimNeeded)
+				HandlerVector.trimToSize();
+			
+			
 			rightMessageArea.setText(names);
 			leftMessageArea.setText(left);
 		}
@@ -469,12 +482,19 @@ public class SpaceServer {
 			} finally {
 				// This client is going down! Remove its name and its print
 				// writer from the sets, and close its socket.
-				if (player != null) {
-					shipHash.remove(player.getName());
-				}
+				
 				if (out != null) {
 					writers.remove(out);
 				}
+				System.out.println("RemovePlayer:"+player.getName());
+				for (PrintWriter writer : writers) {
+					writer.println("RemovePlayer:"+player.getName());
+				}
+				
+				if (player != null) {
+					shipHash.remove(player.getName());
+				}
+				
 				try {
 					socket.close();
 				} catch (IOException e) {

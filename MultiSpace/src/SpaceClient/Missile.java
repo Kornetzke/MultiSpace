@@ -8,8 +8,8 @@ package SpaceClient;
  */
 public class Missile extends Drawable {
 
-	private static double energyCost_ = 10;
-	private String id_;
+	private static double energyCost = 6;
+	private String id;
 	private double damage = 7;
 	private double dx, dy;
 	private double acc;
@@ -30,7 +30,7 @@ public class Missile extends Drawable {
 			String missileID) {
 		super(1, 0, 0);
 
-		this.id_ = missileID;
+		this.id = missileID;
 		this.x = x - width / 2;
 		this.y = y - height / 2;
 		this.acc = 1;
@@ -101,7 +101,7 @@ public class Missile extends Drawable {
 	 * @return the energyCost
 	 */
 	public static double getEnergyCost() {
-		return energyCost_;
+		return energyCost;
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class Missile extends Drawable {
 	 * @param energyCost: the energyCost to set
 	 */
 	public static void setEnergyCost(double energyCost) {
-		Missile.energyCost_ = energyCost;
+		Missile.energyCost = energyCost;
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class Missile extends Drawable {
 	 * @return the iD
 	 */
 	public String getID() {
-		return id_;
+		return id;
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class Missile extends Drawable {
 	 * @param iD: the iD to set
 	 */
 	public void setID(String iD) {
-		id_ = iD;
+		id = iD;
 	}
 
 }

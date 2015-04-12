@@ -9,20 +9,20 @@ package SpaceClient;
  */
 public class Direction {
 
-	private int value_;
+	private int value;
 /**
  * Default Constructor
  * @param value: direction
  */
 	public Direction(int value) {
-		this.value_ = value % 360;
+		this.value = value % 360;
 	}
 /**
  * Retrieves the direction
  * @return direction
  */
 	public int getDirection() {
-		return value_;
+		return value;
 	}
 /**
  * Sets the direction to newValue if it is between 0-359.  Otherwise 0
@@ -30,21 +30,21 @@ public class Direction {
  */
 	public void setDirection(int newvalue) {
 		if (newvalue < 0 || newvalue > 359) {
-			value_ = 0;
+			value = 0;
 		} else
-			this.value_ = newvalue;
+			this.value = newvalue;
 	}
 /**
  * Increments the Direction by increment
  * @param increment
  */
 	public void incrementDirection(double increment) {
-		value_ += increment;
+		value += increment;
 
-		if (value_ >= 360)
-			value_ %= 360;
-		else if (value_ < 0)
-			value_ += 360;
+		if (value >= 360)
+			value %= 360;
+		else if (value < 0)
+			value += 360;
 	}
 /**
  * Retrieves the rotation degrees to the target direction
@@ -53,7 +53,7 @@ public class Direction {
  */
 	public int getRotationDegrees(int targetDirection) {
 
-		int change = 180 - value_;	
+		int change = 180 - value;	
 
 		int temp = 180;
 		targetDirection += change;

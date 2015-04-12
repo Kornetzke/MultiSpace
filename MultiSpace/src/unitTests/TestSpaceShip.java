@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import SpaceClient.SpaceShip;
 import SpaceClient.SpaceShip.PlayerState;
-import SpaceClient.SpaceShip.shipStatus;
+import SpaceClient.SpaceShip.ShipStatus;
 
 public class TestSpaceShip {
 SpaceShip testShip;
@@ -302,17 +302,17 @@ GamePlay gameTest;
 	@Test
 	public void testSetShipStatus() {
 		testShip.setShipStatus("ALIVE");
-		assertEquals("The ship status should be Alive",shipStatus.ALIVE, testShip.getShipStatus());
+		assertEquals("The ship status should be Alive",ShipStatus.ALIVE, testShip.getShipStatus());
 		testShip.setShipStatus("Dead");
-		assertEquals("The ship status should be Dead",shipStatus.DEAD, testShip.getShipStatus());
+		assertEquals("The ship status should be Dead",ShipStatus.DEAD, testShip.getShipStatus());
 	}
 
 	@Test
 	public void testGetShipStatus() {
 		testShip.setShipStatus("ALIVE");
-		assertEquals("The ship status should be Alive",shipStatus.ALIVE, testShip.getShipStatus());
+		assertEquals("The ship status should be Alive",ShipStatus.ALIVE, testShip.getShipStatus());
 		testShip.setShipStatus("Dead");
-		assertEquals("The ship status should be Dead",shipStatus.DEAD, testShip.getShipStatus());
+		assertEquals("The ship status should be Dead",ShipStatus.DEAD, testShip.getShipStatus());
 	}
 
 	@Test

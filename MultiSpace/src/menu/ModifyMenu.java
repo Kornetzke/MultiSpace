@@ -20,25 +20,25 @@ import SpaceClient.Board.GameState;
  * 
  */
 public class ModifyMenu {
-	private GameButton shipOne_;
-	private GameButton shipTwo_;
-	private GameButton shipThree_;
-	private GameButton shipFour_;
-	private GameButton back_;
-	private GameButton joinGame_;
-	private GameTextField name_;
-	private GameTextField server_;
-	private Point onePoint_;
-	private Point twoPoint_;
-	private Point threePoint_;
-	private Point fourPoint_;
-	private Point backPoint_;
-	private Point joinPoint_;
-	private Color innerColor_;
-	private Color outterColor_;
-	private Point namePoint_;
-	private Point serverPoint_;
-	private Point clickPoint_ = new Point(0, 0);
+	private GameButton shipOne;
+	private GameButton shipTwo;
+	private GameButton shipThree;
+	private GameButton shipFour;
+	private GameButton back;
+	private GameButton joinGame;
+	private GameTextField name;
+	private GameTextField server;
+	private Point onePoint;
+	private Point twoPoint;
+	private Point threePoint;
+	private Point fourPoint;
+	private Point backPoint;
+	private Point joinPoint;
+	private Color innerColor;
+	private Color outterColor;
+	private Point namePoint;
+	private Point serverPoint;
+	private Point clickPoint = new Point(0, 0);
 
 	private enum TextState {
 		NAME, SERVER, NONE
@@ -55,34 +55,34 @@ public class ModifyMenu {
  * Default constructor of ModifyMenu
  */
 	public ModifyMenu() {
-		innerColor_ = Color.BLUE;
-		outterColor_ = Color.white;
+		innerColor = Color.BLUE;
+		outterColor = Color.white;
 		int differenceInY = Board.height / 8 + 4;
 		int differenceInX = Board.width / 8 + 4;
 		int startY = Board.height / 2 - Board.height / 20 - differenceInY;
 		int startX = Board.width / 2 - Board.width / 8 - differenceInX;
 
-		onePoint_ = new Point(startX, startY);
-		twoPoint_ = new Point(startX, startY + (1 * differenceInY));
-		threePoint_ = new Point(startX, startY + (2 * differenceInY));
-		fourPoint_ = new Point(startX, startY + (3 * differenceInY));
-		backPoint_ = new Point(startX, startY + (4 * differenceInY));
-		joinPoint_ = new Point(startX, startY + (5 * differenceInY));
-		namePoint_ = new Point(startX, startY - differenceInY);
-		serverPoint_ = new Point(startX, startY - (2 * differenceInY));
+		onePoint = new Point(startX, startY);
+		twoPoint = new Point(startX, startY + (1 * differenceInY));
+		threePoint = new Point(startX, startY + (2 * differenceInY));
+		fourPoint = new Point(startX, startY + (3 * differenceInY));
+		backPoint = new Point(startX, startY + (4 * differenceInY));
+		joinPoint = new Point(startX, startY + (5 * differenceInY));
+		namePoint = new Point(startX, startY - differenceInY);
+		serverPoint = new Point(startX, startY - (2 * differenceInY));
 
-		name_ = new GameTextField(namePoint_, outterColor_, "Name");
-		server_ = new GameTextField(serverPoint_, outterColor_, "Server IP");
-		shipOne_ = new GameButton(onePoint_, innerColor_, outterColor_,
+		name = new GameTextField(namePoint, outterColor, "Name");
+		server = new GameTextField(serverPoint, outterColor, "Server IP");
+		shipOne = new GameButton(onePoint, innerColor, outterColor,
 				"Ship One");
-		shipTwo_ = new GameButton(twoPoint_, innerColor_, outterColor_,
+		shipTwo = new GameButton(twoPoint, innerColor, outterColor,
 				"Ship Two");
-		shipThree_ = new GameButton(threePoint_, innerColor_, outterColor_,
+		shipThree = new GameButton(threePoint, innerColor, outterColor,
 				"Ship Three");
-		shipFour_ = new GameButton(fourPoint_, innerColor_, outterColor_,
+		shipFour = new GameButton(fourPoint, innerColor, outterColor,
 				"Ship Four");
-		back_ = new GameButton(backPoint_, innerColor_, outterColor_, "Back");
-		joinGame_ = new GameButton(joinPoint_, Color.red, outterColor_,
+		back = new GameButton(backPoint, innerColor, outterColor, "Back");
+		joinGame = new GameButton(joinPoint, Color.red, outterColor,
 				"Join Game");
 	}
 /**
@@ -98,14 +98,14 @@ public class ModifyMenu {
 					Board.width / 3, Board.height / 3);
 		}
 
-		shipOne_.draw(g2d);
-		shipTwo_.draw(g2d);
-		shipThree_.draw(g2d);
-		shipFour_.draw(g2d);
-		back_.draw(g2d);
-		joinGame_.draw(g2d);
-		name_.draw(g2d);
-		server_.draw(g2d);
+		shipOne.draw(g2d);
+		shipTwo.draw(g2d);
+		shipThree.draw(g2d);
+		shipFour.draw(g2d);
+		back.draw(g2d);
+		joinGame.draw(g2d);
+		name.draw(g2d);
+		server.draw(g2d);
 	}
 /**
  * Updates the menu.  Updates the location/width of buttons/fields
@@ -117,45 +117,45 @@ public class ModifyMenu {
 		int startX = Board.width / 2 - Board.width / 8
 				- (int) (differenceInX * .5);
 
-		shipOne_.update(new Point(startX, startY));
-		shipTwo_.update(new Point(startX + (1 * differenceInX), startY
+		shipOne.update(new Point(startX, startY));
+		shipTwo.update(new Point(startX + (1 * differenceInX), startY
 				+ (0 * differenceInY)));
-		shipThree_.update(new Point(startX, startY + (1 * differenceInY)));
-		shipFour_.update(new Point(startX + (1 * differenceInX), startY
+		shipThree.update(new Point(startX, startY + (1 * differenceInY)));
+		shipFour.update(new Point(startX + (1 * differenceInX), startY
 				+ (1 * differenceInY)));
-		back_.update(new Point(startX, startY + (2 * differenceInY)));
-		joinGame_.update(new Point(startX + ((int) (1 * differenceInX)), startY
+		back.update(new Point(startX, startY + (2 * differenceInY)));
+		joinGame.update(new Point(startX + ((int) (1 * differenceInX)), startY
 				+ (2 * differenceInY)));
-		name_.update(new Point(startX, startY - (int) (differenceInY * .5)));
-		server_.update(new Point(startX, startY - (int) (1 * differenceInY)));
+		name.update(new Point(startX, startY - (int) (differenceInY * .5)));
+		server.update(new Point(startX, startY - (int) (1 * differenceInY)));
 		switch (shipSelected_) {
 		case ONE:
-			shipOne_.changeInsideColor(Color.DARK_GRAY);
+			shipOne.changeInsideColor(Color.DARK_GRAY);
 			break;
 		case TWO:
-			shipTwo_.changeInsideColor(Color.DARK_GRAY);
+			shipTwo.changeInsideColor(Color.DARK_GRAY);
 
 			break;
 		case THREE:
 
-			shipThree_.changeInsideColor(Color.DARK_GRAY);
+			shipThree.changeInsideColor(Color.DARK_GRAY);
 			break;
 		case FOUR:
-			shipFour_.changeInsideColor(Color.DARK_GRAY);
+			shipFour.changeInsideColor(Color.DARK_GRAY);
 			break;
 		}
 		switch (textSelected) {
 		case NONE:
-			name_.changeInsideColor(Color.lightGray);
-			server_.changeInsideColor(Color.LIGHT_GRAY);
+			name.changeInsideColor(Color.lightGray);
+			server.changeInsideColor(Color.LIGHT_GRAY);
 			break;
 		case NAME:
-			name_.changeInsideColor(Color.YELLOW);
-			server_.changeInsideColor(Color.LIGHT_GRAY);
+			name.changeInsideColor(Color.YELLOW);
+			server.changeInsideColor(Color.LIGHT_GRAY);
 			break;
 		case SERVER:
-			name_.changeInsideColor(Color.lightGray);
-			server_.changeInsideColor(Color.yellow);
+			name.changeInsideColor(Color.lightGray);
+			server.changeInsideColor(Color.yellow);
 			break;
 		}
 
@@ -166,11 +166,11 @@ public class ModifyMenu {
  */
 	public void mouseClicked(MouseEvent e) {
 		textSelected = TextState.NONE;
-		clickPoint_ = e.getPoint();
-		if (back_.contain(clickPoint_)) {
-			Board.gameStatus_ = GameState.STARTMENU;
+		clickPoint = e.getPoint();
+		if (back.contain(clickPoint)) {
+			Board.gameStatus = GameState.STARTMENU;
 		}
-		if (joinGame_.contain(clickPoint_)) {
+		if (joinGame.contain(clickPoint)) {
 			int ship = -1;
 			switch (shipSelected_) {
 			case ONE:
@@ -187,38 +187,38 @@ public class ModifyMenu {
 				break;
 			}
 
-			Board.gameStatus_ = GameState.GAME;
+			Board.gameStatus = GameState.GAME;
 			GamePlay.getPlayer().setImage(ship);
 			GamePlay.getPlayer().setHitBox(ship);
-			GamePlay.getPlayer().setName(name_.getText());
+			GamePlay.getPlayer().setName(name.getText());
 			if (this.rejectedName_ == false)
-				Board.gamePlay_.startHandler(server_.getText());
+				Board.gamePlay.startHandler(server.getText());
 			else
-				GamePlay.getPlayer().setName(name_.getText());
+				GamePlay.getPlayer().setName(name.getText());
 
 		}
-		if (name_.contain(clickPoint_)) {
-			name_.clicked();
+		if (name.contain(clickPoint)) {
+			name.clicked();
 			textSelected = TextState.NAME;
 		}
-		if (server_.contain(clickPoint_)) {
-			server_.clicked();
+		if (server.contain(clickPoint)) {
+			server.clicked();
 			textSelected = TextState.SERVER;
 
 		}
-		if (shipOne_.contain(clickPoint_)) {
+		if (shipOne.contain(clickPoint)) {
 			GamePlay.getPlayer().setImage(8);
 			shipSelected_ = ShipState.ONE;
 		}
-		if (shipTwo_.contain(clickPoint_)) {
+		if (shipTwo.contain(clickPoint)) {
 			GamePlay.getPlayer().setImage(0);
 			shipSelected_ = ShipState.TWO;
 		}
-		if (shipThree_.contain(clickPoint_)) {
+		if (shipThree.contain(clickPoint)) {
 			GamePlay.getPlayer().setImage(9);
 			shipSelected_ = ShipState.THREE;
 		}
-		if (shipFour_.contain(clickPoint_)) {
+		if (shipFour.contain(clickPoint)) {
 			GamePlay.getPlayer().setImage(10);
 			shipSelected_ = ShipState.FOUR;
 		}
@@ -231,50 +231,50 @@ public class ModifyMenu {
 	public void mouseMoved(MouseEvent e) {
 		Point p = e.getPoint();
 
-		if (name_.contain(p) && textSelected != TextState.NAME) {
-			name_.changeInsideColor(Color.cyan);
+		if (name.contain(p) && textSelected != TextState.NAME) {
+			name.changeInsideColor(Color.cyan);
 		} else if (textSelected != TextState.NAME)
-			name_.changeInsideColor(Color.LIGHT_GRAY);
-		if (server_.contain(p) && textSelected != TextState.SERVER) {
-			server_.changeInsideColor(Color.cyan);
+			name.changeInsideColor(Color.LIGHT_GRAY);
+		if (server.contain(p) && textSelected != TextState.SERVER) {
+			server.changeInsideColor(Color.cyan);
 		} else if (textSelected != TextState.SERVER)
-			server_.changeInsideColor(Color.LIGHT_GRAY);
+			server.changeInsideColor(Color.LIGHT_GRAY);
 
-		if (joinGame_.contain(p)) {
-			joinGame_.changeInsideColor(Color.black);
+		if (joinGame.contain(p)) {
+			joinGame.changeInsideColor(Color.black);
 		} else {
-			joinGame_.changeInsideColor(Color.RED);
+			joinGame.changeInsideColor(Color.RED);
 		}
-		if (shipOne_.contain(p) && shipSelected_ != ShipState.ONE) {
-			shipOne_.changeInsideColor(Color.BLACK);
+		if (shipOne.contain(p) && shipSelected_ != ShipState.ONE) {
+			shipOne.changeInsideColor(Color.BLACK);
 		} else {
 			if (shipSelected_ != ShipState.ONE)
-				shipOne_.changeInsideColor(Color.blue);
+				shipOne.changeInsideColor(Color.blue);
 		}
-		if (shipTwo_.contain(p) && shipSelected_ != ShipState.TWO) {
-			shipTwo_.changeInsideColor(Color.black);
+		if (shipTwo.contain(p) && shipSelected_ != ShipState.TWO) {
+			shipTwo.changeInsideColor(Color.black);
 		} else {
 			if (shipSelected_ != ShipState.TWO)
-				shipTwo_.changeInsideColor(Color.blue);
+				shipTwo.changeInsideColor(Color.blue);
 		}
-		if (shipThree_.contain(p) && shipSelected_ != ShipState.THREE) {
-			shipThree_.changeInsideColor(Color.black);
+		if (shipThree.contain(p) && shipSelected_ != ShipState.THREE) {
+			shipThree.changeInsideColor(Color.black);
 		} else {
 			if (shipSelected_ != ShipState.THREE)
-				shipThree_.changeInsideColor(Color.blue);
+				shipThree.changeInsideColor(Color.blue);
 		}
-		if (shipFour_.contain(p) && shipSelected_ != ShipState.FOUR) {
-			shipFour_.changeInsideColor(Color.black);
+		if (shipFour.contain(p) && shipSelected_ != ShipState.FOUR) {
+			shipFour.changeInsideColor(Color.black);
 		} else {
 			if (shipSelected_ != ShipState.FOUR)
-				shipFour_.changeInsideColor(Color.blue);
+				shipFour.changeInsideColor(Color.blue);
 		}
 
-		if (back_.contain(p)) {
-			back_.changeInsideColor(Color.black);
+		if (back.contain(p)) {
+			back.changeInsideColor(Color.black);
 		} else {
 
-			back_.changeInsideColor(Color.blue);
+			back.changeInsideColor(Color.blue);
 		}
 
 	}
@@ -296,9 +296,9 @@ public class ModifyMenu {
 				break;
 			}
 		} else if (textSelected == TextState.NAME) {
-			name_.keyPressed(e);
+			name.keyPressed(e);
 		} else if (textSelected == TextState.SERVER) {
-			server_.keyPressed(e);
+			server.keyPressed(e);
 		}
 
 	}
@@ -307,7 +307,7 @@ public class ModifyMenu {
  */
 	public void nameReject() {
 		rejectedName_ = true;
-		Board.gameStatus_ = GameState.MODIFYMENU;
+		Board.gameStatus = GameState.MODIFYMENU;
 	}
 	/**
 	 * returns the rejected Boolean. For testing Purposes
@@ -321,7 +321,7 @@ public class ModifyMenu {
 	 * @return array of GameButtons used
 	 */
 	public GameButton[] returnButtons(){
-		GameButton[] arrayButton = {shipOne_,shipTwo_,shipThree_, shipFour_, back_, joinGame_};
+		GameButton[] arrayButton = {shipOne,shipTwo,shipThree, shipFour, back, joinGame};
 		return arrayButton;
 	}
 	/**
@@ -329,7 +329,7 @@ public class ModifyMenu {
 	 * @return array of GameTextFields used
 	 */
 	public GameTextField[] returnTextFields(){
-		GameTextField[] textFields = {name_, server_};
+		GameTextField[] textFields = {name, server};
 		return textFields;
 	}
 	

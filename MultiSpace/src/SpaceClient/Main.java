@@ -39,13 +39,6 @@ public class Main extends JFrame {
  * @param args
  */
 	public static void main(String[] args) {
-		
-	     // switch on translucency acceleration in Windows
-	    System.setProperty("sun.java2d.translaccel", "true"); 
-	    // System.setProperty("sun.java2d.ddforcevram", "true"); 
-
-	     // switch on hardware acceleration if using OpenGL with pbuffers
-	      System.setProperty("sun.java2d.opengl", "true"); 
 
 		new Main(500, 500);
 	}

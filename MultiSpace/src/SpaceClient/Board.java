@@ -16,6 +16,7 @@ import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
 import javax.swing.Timer;
 
 import menu.StartMenu;
@@ -36,17 +37,17 @@ public class Board extends JPanel implements ActionListener {
 		GAME, MAINMENU, STARTMENU, MODIFYMENU, SETTINGS, ESCMENU, DISCONNECTED
 	};
 
-	public static GamePlay gamePlay_;
-	private StartMenu startMenu_;
-	public static ModifyMenu modifyMenu_;
+	public static GamePlay gamePlay;
+	private StartMenu startMenu;
+	public static ModifyMenu modifyMenu;
 
-	public static GameState gameStatus_;
+	public static GameState gameStatus;
 
 	public static int height, width; // height and width of the board.
 
-	private Timer timer_; // timer for the repaint function.
+	private Timer gameTimer; // timer for the repaint function.
 
-	public static ImageIcon[] iiarray = {
+	public static ImageIcon[] imageIconArray = {
 
 	new ImageIcon(Board.class.getResource("Fighter150W.png")),
 			new ImageIcon(Board.class.getResource("LazerFix.png")),
@@ -62,17 +63,17 @@ public class Board extends JPanel implements ActionListener {
 
 	};
 
-	private final int DELAY = 15; //15
+	private final int UPDATE_DELAY = 15;
 
 	/**
 	 * Default constructor of Board. Instantiates all of the items in board.
 	 */
 	public Board() {
 		this.setFocusTraversalKeysEnabled(false);
-		gameStatus_ = GameState.STARTMENU;
-		startMenu_ = new StartMenu();
-		modifyMenu_ = new ModifyMenu();
-		gamePlay_ = new GamePlay();
+		gameStatus = GameState.STARTMENU;
+		startMenu = new StartMenu();
+		modifyMenu = new ModifyMenu();
+		gamePlay = new GamePlay();
 		Board.height = this.getBounds().height;
 		Board.width = this.getBounds().width;
 		setFocusable(true);
@@ -82,8 +83,8 @@ public class Board extends JPanel implements ActionListener {
 		addMouseListener(new MAdapter());
 		addMouseMotionListener(new TAdapter());
 
-		timer_ = new Timer(DELAY, this);
-		timer_.start();
+		gameTimer = new Timer(UPDATE_DELAY, this);
+		gameTimer.start();
 
 	}
 
@@ -93,16 +94,16 @@ public class Board extends JPanel implements ActionListener {
 		 */
 		public void keyPressed(KeyEvent e) {
 
-			switch (gameStatus_) {
+			switch (gameStatus) {
 			case GAME:
-				gamePlay_.keyPressed(e);
+				gamePlay.keyPressed(e);
 				break;
 			case ESCMENU:
 				break;
 			case MAINMENU:
 				break;
 			case MODIFYMENU:
-				modifyMenu_.keyPressed(e);
+				modifyMenu.keyPressed(e);
 				break;
 			case SETTINGS:
 				break;
@@ -118,9 +119,9 @@ public class Board extends JPanel implements ActionListener {
 		 * KeyReleased. Sends to the specific menu or to GamePlay
 		 */
 		public void keyReleased(KeyEvent e) {
-			switch (gameStatus_) {
+			switch (gameStatus) {
 			case GAME:
-				gamePlay_.keyReleased(e);
+				gamePlay.keyReleased(e);
 			case ESCMENU:
 				break;
 			case MAINMENU:
@@ -142,11 +143,11 @@ public class Board extends JPanel implements ActionListener {
 		 * MouseClicked. Sends to the specific menu.
 		 */
 		public void mouseClicked(MouseEvent e) {
-			if (gameStatus_ == GameState.STARTMENU) {
-				startMenu_.mouseClicked(e);
+			if (gameStatus == GameState.STARTMENU) {
+				startMenu.mouseClicked(e);
 			}
-			if (gameStatus_ == GameState.MODIFYMENU) {
-				modifyMenu_.mouseClicked(e);
+			if (gameStatus == GameState.MODIFYMENU) {
+				modifyMenu.mouseClicked(e);
 			}
 		}
 
@@ -166,8 +167,8 @@ public class Board extends JPanel implements ActionListener {
 		 * MousePressed. Sends to GamePlay if the gamestate is Game
 		 */
 		public void mousePressed(MouseEvent e) {
-			if (gameStatus_ == GameState.GAME) {
-				gamePlay_.mousePressed(e);
+			if (gameStatus == GameState.GAME) {
+				gamePlay.mousePressed(e);
 			}
 
 		}
@@ -177,8 +178,8 @@ public class Board extends JPanel implements ActionListener {
 		 */
 
 		public void mouseReleased(MouseEvent e) {
-			if (gameStatus_ == GameState.GAME) {
-				gamePlay_.mouseReleased(e);
+			if (gameStatus == GameState.GAME) {
+				gamePlay.mouseReleased(e);
 			}
 		}
 
@@ -189,15 +190,15 @@ public class Board extends JPanel implements ActionListener {
 		 * Used to track mouse movement.  Sends to the state the game is in.
 		 */
 		public void mouseMoved(MouseEvent e) {
-			switch (gameStatus_) {
+			switch (gameStatus) {
 			case GAME:
-				gamePlay_.mouseMoved(e);
+				gamePlay.mouseMoved(e);
 				break;
 			case STARTMENU:
-				startMenu_.mouseMoved(e);
+				startMenu.mouseMoved(e);
 				break;
 			case MODIFYMENU:
-				modifyMenu_.mouseMoved(e);
+				modifyMenu.mouseMoved(e);
 			case ESCMENU:
 				break;
 			case MAINMENU:
@@ -212,8 +213,8 @@ public class Board extends JPanel implements ActionListener {
  * MouseDragged.  Sends to gamePlay if the game state is in game.
  */
 		public void mouseDragged(MouseEvent e) {
-			if (gameStatus_ == GameState.GAME) {
-				gamePlay_.mouseDragged(e);
+			if (gameStatus == GameState.GAME) {
+				gamePlay.mouseDragged(e);
 			}
 
 		}
@@ -225,18 +226,18 @@ public class Board extends JPanel implements ActionListener {
 
 		Board.height = this.getHeight();
 		Board.width = this.getWidth();
-		switch (gameStatus_) {
+		switch (gameStatus) {
 		case GAME:
 
-			gamePlay_.update();
+			gamePlay.update();
 
 			break;
 		case STARTMENU:
 
-			startMenu_.update();
+			startMenu.update();
 			break;
 		case MODIFYMENU:
-			modifyMenu_.update();
+			modifyMenu.update();
 		case ESCMENU:
 			break;
 		case MAINMENU:
@@ -257,21 +258,22 @@ public class Board extends JPanel implements ActionListener {
 
 		super.paint(g);
 		Graphics2D g2d = (Graphics2D) g;
-		
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
+	    RenderingHints rh = new RenderingHints(
+	            RenderingHints.KEY_ANTIALIASING,
+	            RenderingHints.VALUE_ANTIALIAS_ON);
+	   g2d.setRenderingHints(rh);
 
-		switch (gameStatus_) {
+		switch (gameStatus) {
 		case GAME:
-			gamePlay_.draw(g2d);
+			gamePlay.draw(g2d);
 			break;
 		case MAINMENU:
 			break;
 		case STARTMENU:
-			startMenu_.draw(g2d);
+			startMenu.draw(g2d);
 			break;
 		case MODIFYMENU:
-			modifyMenu_.draw(g2d);
+			modifyMenu.draw(g2d);
 		case ESCMENU:
 			break;
 		case SETTINGS:

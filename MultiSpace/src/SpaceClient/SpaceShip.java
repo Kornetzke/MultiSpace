@@ -15,34 +15,34 @@ public class SpaceShip extends Drawable {
 	
 	private String shipName;
 	
-	private double health_;
-	private double maxHealth_;
-	private double shield_;
-	private double maxShield_;
-	private double shieldRegen_;
-	private double shieldRegenDelay_;
-	private double shieldRegenCount_;
-	private double energy_;
-	private double maxEnergy_;
-	private double energyRegen_;
-	private int deathCount_;
+	private double health;
+	private double maxHealth;
+	private double shield;
+	private double maxShield;
+	private double shieldRegen;
+	private double shieldRegenDelay;
+	private double shieldRegenCount;
+	private double energy;
+	private double maxEnergy;
+	private double energyRegen;
+	private int deathCount;
 	
-	private boolean changed_ =false;
-	private double dx_, dy_;
-	private double acceleration_;
-	private double spaceBreak_;
+	private boolean changed =false;
+	private double dx, dy;
+	private double acceleration;
+	private double spaceBreak;
 	private final double MAX_SPEED=15;
-	private double speed_ = 0;
+	private double speed = 0;
 	private final double TURN_SPEED =3;
-	private int weaponCounter_;
+	private int weaponCounter;
 	private final int WEAPON_COOLDOWN = 10;
-	private Keydown keydown_;
-	public boolean left_ =true;
-	private boolean firing_=false;
-	public  enum shipStatus  {ALIVE, DEAD};
+	private Keydown keydown;
+	public boolean left =true;
+	private boolean firing=false;
+	public  enum ShipStatus  {ALIVE, DEAD};
 	public static enum PlayerState {MENU,GAME,DISCONNECT};
-	private PlayerState playerState_;
-	private shipStatus shipStatus_ = shipStatus.ALIVE;
+	private PlayerState playerState;
+	private ShipStatus shipStatus = ShipStatus.ALIVE;
 	
 	private Vector<Missile> weaponList_ = new Vector<Missile>();
 	
@@ -57,14 +57,14 @@ public class SpaceShip extends Drawable {
 	 *
 	 */
 	class Keydown {
-		private boolean left, right, forward, fire, spaceBreak;
+		private boolean keyDownLeft, keyDownRight, keyDownForward, keyDownFire, keyDownSpaceBreak;
 
 		public Keydown() {
-			left = false;
-			right = false;
-			forward = false;
-			spaceBreak = false;
-			fire = false;
+			this.keyDownLeft = false;
+			this.keyDownRight = false;
+			this.keyDownForward = false;
+			this.keyDownSpaceBreak = false;
+			this.keyDownFire = false;
 		}
 	}
 
@@ -76,38 +76,38 @@ public class SpaceShip extends Drawable {
 	 */
 	public SpaceShip(int faceNumber, int x, int y) {
 		super(0, x, y);
-		deathCount_=0;
+		deathCount=0;
 
 		
 
-		ii = Board.iiarray[faceNumber];
-		image = ii.getImage();
-		acceleration_=.5;
-		spaceBreak_=.4;
+		imageIcon = Board.imageIconArray[faceNumber];
+		image = imageIcon.getImage();
+		acceleration=.5;
+		spaceBreak=.4;
 		direction.setDirection(0);
 		mouseLocation_ = new Point(0,0);
-		keydown_ = new Keydown();
+		keydown = new Keydown();
 		updateMiddle();
 
-		dx_ = 0;
-		dy_ = 0;
+		dx = 0;
+		dy = 0;
 		
 		
 		
 this.setHitBox(faceNumber);
 		
-		maxShield_ = 100;
-		maxHealth_ = 100;
-		maxEnergy_ = 100;
+		maxShield = 100;
+		maxHealth = 100;
+		maxEnergy = 100;
 		
-		shieldRegenDelay_ = 120;
-		shieldRegenCount_=0;
-		shieldRegen_=.6;
-		energyRegen_=.5;		
+		shieldRegenDelay = 120;
+		shieldRegenCount=0;
+		shieldRegen=.6;
+		energyRegen=.5;		
 		
-		shield_ = 100;
-		health_ = 100;
-		energy_ = 100;
+		shield = 100;
+		health = 100;
+		energy = 100;
 		
 
 	}
@@ -127,13 +127,13 @@ this.setHitBox(faceNumber);
 		updateMiddle();
 		this.setHitBox(face);
 		
-		maxShield_ = 100;
-		maxHealth_ = 100;
-		maxEnergy_ = 100;
+		maxShield = 100;
+		maxHealth = 100;
+		maxEnergy = 100;
 		
-		shield_ = 100;
-		health_ = 100;
-		energy_ = 100;
+		shield = 100;
+		health = 100;
+		energy = 100;
 	}
 	
 
@@ -168,49 +168,49 @@ this.setHitBox(faceNumber);
 	 * @param set - new value
 	 */
 	public void setForward(boolean set) {
-		this.keydown_.forward = set;
+		this.keydown.keyDownForward = set;
 	}
 /**
  * This returns the keydown.forward from the player
  * @return keydown.forward
  */
 	public boolean getForward(){
-		return this.keydown_.forward;
+		return this.keydown.keyDownForward;
 	}
 	/**
 	 * This sets the keydown.left for the player
 	 * @param set - new value
 	 */
 	public void setLeft(boolean set) {
-		this.keydown_.left = set;
+		this.keydown.keyDownLeft = set;
 	}
 	/**
 	 * This returns the value of the keydown.left
 	 * @return keydown.left
 	 */
 	public boolean getLeft(){
-		return this.keydown_.left;
+		return this.keydown.keyDownLeft;
 	}
 	/**
 	 * this sets the keydown.right of the player
 	 * @param set - new value
 	 */
 	public void setRight(boolean set) {
-		this.keydown_.right = set;
+		this.keydown.keyDownRight = set;
 	}
 	/**
 	 * This returns the value of the player's keydown.right
 	 * @return keydown.right
 	 */
 	public boolean getRight(){
-		return this.keydown_.right;
+		return this.keydown.keyDownRight;
 	}
 	/**
 	 * This sets the value of keydown.spaceBreak for the player
 	 * @param set - new value
 	 */
 	public void setBreak(boolean set) {
-		this.keydown_.spaceBreak = set;
+		this.keydown.keyDownSpaceBreak = set;
 	}
 	
 	/**
@@ -218,21 +218,21 @@ this.setHitBox(faceNumber);
 	 * @return keydown.spaceBreak
 	 */
 	public boolean getBreak(){
-		return this.keydown_.spaceBreak;
+		return this.keydown.keyDownSpaceBreak;
 	}
 	/**
 	 * This sets the value of the keydown.fire of the player
 	 * @param set - new value
 	 */
 	public void setFire(boolean set) {
-		this.keydown_.fire = set;
+		this.keydown.keyDownFire = set;
 	}
 	/**
 	 * This returns the value of the keydown.fire of the player
 	 * @return keydown.fire
 	 */
 	public boolean getFire(){
-		return this.keydown_.fire;
+		return this.keydown.keyDownFire;
 	}
 	/**
 	 * This method finds the direction the ship needs to point at the mouse location and executes a turn based on the ships turnSpeed.
@@ -247,7 +247,7 @@ this.setHitBox(faceNumber);
 		if (mouseAngle<0)
 			mouseAngle=360+mouseAngle;		
 		if (direction.getDirection()!=mouseAngle)
-			changed_=true;
+			changed=true;
 		
 		int move = (direction.getRotationDegrees(mouseAngle));
 		
@@ -280,13 +280,13 @@ this.setHitBox(faceNumber);
 	public void Accelerate(double deltaDirection, double percentage) {
 
 			double dir = Math.toRadians(direction.getDirection()+deltaDirection);
-			dy_ -= Math.cos(dir) * (acceleration_*percentage);
-			dx_ -= Math.sin(dir) * (acceleration_*percentage);
-			speed_ = Math.sqrt(Math.pow(dy_, 2) + Math.pow(dx_, 2));
+			dy -= Math.cos(dir) * (acceleration*percentage);
+			dx -= Math.sin(dir) * (acceleration*percentage);
+			speed = Math.sqrt(Math.pow(dy, 2) + Math.pow(dx, 2));
 
 	}
 	public double getSpeed(){
-		return speed_;
+		return speed;
 	}
 	
 	/**
@@ -303,25 +303,25 @@ this.setHitBox(faceNumber);
 	 */
 	public void Move() {
 		
-			if ((dx_ < 0.001 && dx_ > 0) || (dx_ > -0.001 && dx_ < 0)) {
-				dx_ = 0;
+			if ((dx < 0.001 && dx > 0) || (dx > -0.001 && dx < 0)) {
+				dx = 0;
 			}
 
-			if ((dy_ < 0.001 && dy_ > 0) || (dy_ > -0.001 && dy_ < 0)) {
-				dy_ = 0;
+			if ((dy < 0.001 && dy > 0) || (dy > -0.001 && dy < 0)) {
+				dy = 0;
 			}
 			
 			
 			
-			speed_ = Math.sqrt(Math.pow(dy_, 2) + Math.pow(dx_, 2));
+			speed = Math.sqrt(Math.pow(dy, 2) + Math.pow(dx, 2));
 			
-			if (speed_>MAX_SPEED){
-				dy_ = MAX_SPEED / speed_ * dy_;
-				dx_ = MAX_SPEED / speed_ * dx_;
+			if (speed>MAX_SPEED){
+				dy = MAX_SPEED / speed * dy;
+				dx = MAX_SPEED / speed * dx;
 		}
 
-		x += dx_;
-		y += dy_;
+		x += dx;
+		y += dy;
 
 		updateMiddle();
 		hitBox.update(middle, direction.getDirection());
@@ -352,29 +352,29 @@ this.setHitBox(faceNumber);
 	public void applySpaceBreak() {
 
 		
-			if (dx_ < 0) {
-				if (dx_ > spaceBreak_)
-					dx_ = 0;
+			if (dx < 0) {
+				if (dx > spaceBreak)
+					dx = 0;
 				else
-					dx_ += spaceBreak_;
+					dx += spaceBreak;
 			}
-			if (dy_ < 0) {
-				if (dy_ > spaceBreak_)
-					dy_ = 0;
+			if (dy < 0) {
+				if (dy > spaceBreak)
+					dy = 0;
 				else
-					dy_ += spaceBreak_;
+					dy += spaceBreak;
 			}
-			if (dx_ > 0) {
-				if (dx_ < spaceBreak_)
-					dx_ = 0;
+			if (dx > 0) {
+				if (dx < spaceBreak)
+					dx = 0;
 				else
-					dx_ -= spaceBreak_;
+					dx -= spaceBreak;
 			}
-			if (dy_ > 0) {
-				if (dy_ < spaceBreak_)
-					dy_ = 0;
+			if (dy > 0) {
+				if (dy < spaceBreak)
+					dy = 0;
 				else
-					dy_ -= spaceBreak_;
+					dy -= spaceBreak;
 			}
 	}
 
@@ -383,7 +383,7 @@ this.setHitBox(faceNumber);
 	 * This method will call the regenerateStats method, and finally the move method.
 	 */
 	public void cycle() {
-		if(shipStatus_ == shipStatus.ALIVE){
+		if(shipStatus == ShipStatus.ALIVE){
 		regenerateStats();
 		
 
@@ -392,16 +392,16 @@ this.setHitBox(faceNumber);
 		
 		checkFire();
 		
-		if (keydown_.forward){
+		if (keydown.keyDownForward){
 			Accelerate(0, .7);
 		}
-		if (keydown_.spaceBreak){
+		if (keydown.keyDownSpaceBreak){
 			applySpaceBreak();
 		}
-		if (keydown_.left){
+		if (keydown.keyDownLeft){
 			Accelerate(90,.3);
 		}
-		if (keydown_.right){
+		if (keydown.keyDownRight){
 			Accelerate(-90,.3);
 		}
 		
@@ -412,7 +412,7 @@ this.setHitBox(faceNumber);
 	 * The paint method will paint the ship along with what the ship contains. This will paint the ship's missiles before painting the ship itself.
 	 */
 	public void paint(Graphics2D g2d, double dx, double dy) {
-		if(shipStatus_ == shipStatus.ALIVE){
+		if(shipStatus == ShipStatus.ALIVE){
 
 			
 		for (int x = 0; x < weaponList_.size(); x++) {
@@ -432,15 +432,15 @@ this.setHitBox(faceNumber);
 	 * This method will regenerate the shields and energy of the ship. Some of the values will not regen right away.
 	 */
 	public void regenerateStats(){
-		if(energy_ <maxEnergy_){
-		energy_+=energyRegen_;
+		if(energy <maxEnergy){
+		energy+=energyRegen;
 		}
-		if(shieldRegenCount_>0){
+		if(shieldRegenCount>0){
 			
-			shieldRegenCount_--;
+			shieldRegenCount--;
 		}
-		if(shield_ < maxShield_  && shieldRegenCount_ <= 0){
-			shield_ +=shieldRegen_;
+		if(shield < maxShield  && shieldRegenCount <= 0){
+			shield +=shieldRegen;
 		}
 	
 	}
@@ -450,22 +450,22 @@ this.setHitBox(faceNumber);
 	 */
 	public void checkFire(){
 		
-		if (weaponCounter_ > 0){
-			weaponCounter_--;
+		if (weaponCounter > 0){
+			weaponCounter--;
 		}
-		if (keydown_.fire && weaponCounter_ == 0 && energy_ >= Missile.getEnergyCost() ) {
+		if (keydown.keyDownFire && weaponCounter == 0 && energy >= Missile.getEnergyCost() ) {
 	
-			weaponCounter_ = WEAPON_COOLDOWN;
+			weaponCounter = WEAPON_COOLDOWN;
 			
 			String missileID = shipName+"_"+System.currentTimeMillis();
-			fire( dx_, dy_, direction.getDirection(),missileID);
+			fire( dx, dy, direction.getDirection(),missileID);
 			
 			
-			energy_ -= Missile.getEnergyCost();
+			energy -= Missile.getEnergyCost();
 			
 				GamePlay.handler.sendToServer("AddMissile:" + shipName + ":"
-					  + dx_ + ":"
-					+ dy_+ ":"+ direction.getDirection()+":"+missileID);
+					  + dx + ":"
+					+ dy+ ":"+ direction.getDirection()+":"+missileID);
 		
 			
 		}
@@ -477,7 +477,7 @@ this.setHitBox(faceNumber);
 	 * This method will return changed to false
 	 */
 	public void resetChange(){
-		changed_ = false;
+		changed = false;
 	}
 	/**
 	 * this method converts the ship's information into a usable string for the communication with the server
@@ -490,7 +490,7 @@ this.setHitBox(faceNumber);
 	 * @return the dx
 	 */
 	public double getDx() {
-		return dx_;
+		return dx;
 	}
 
 
@@ -498,7 +498,7 @@ this.setHitBox(faceNumber);
 	 * @param dx the dx to set
 	 */
 	public void setDx(double dx) {
-		this.dx_ = dx;
+		this.dx = dx;
 	}
 
 
@@ -506,7 +506,7 @@ this.setHitBox(faceNumber);
 	 * @return the dy
 	 */
 	public double getDy() {
-		return dy_;
+		return dy;
 	}
 
 
@@ -514,7 +514,7 @@ this.setHitBox(faceNumber);
 	 * @param dy the dy to set
 	 */
 	public void setDy(double dy) {
-		this.dy_ = dy;
+		this.dy = dy;
 	}
 	
 	/**
@@ -531,12 +531,12 @@ this.setHitBox(faceNumber);
 	 * @deprecated
 	 */
 	public boolean isFiring() {
-		if(energy_ >=5){
-		if(firing_==true){
-			firing_=false;
+		if(energy >=5){
+		if(firing==true){
+			firing=false;
 			return true;
 		}else
-		return firing_;
+		return firing;
 		}
 		else
 		return false;
@@ -576,13 +576,13 @@ this.setHitBox(faceNumber);
 		}
 		
 					
-		if(left_){
+		if(left){
 		weaponList_.add(new Missile(middle.x+gunx, middle.y-guny, direction, dx, dy, missileID));
-		left_=false;
+		left=false;
 		}
 		else{
 			weaponList_.add(new Missile(middle.x-gunx, middle.y+guny, direction, dx, dy, missileID));
-		left_=true;	
+		left=true;	
 		}
 
 	
@@ -600,13 +600,13 @@ this.setHitBox(faceNumber);
 	 * @return the changed
 	 */
 	public boolean isChanged() {
-		return changed_;
+		return changed;
 	}
 	/**
 	 * @param changed the changed to set
 	 */
 	public void setChanged(boolean changed) {
-		this.changed_ = changed;
+		this.changed = changed;
 	}
 	/**
 	 * @return the name
@@ -656,16 +656,16 @@ this.setHitBox(faceNumber);
 	 */
 	private void damageShip(double damage) {
 		
-		shieldRegenCount_ = shieldRegenDelay_;
+		shieldRegenCount = shieldRegenDelay;
 
-		if(shield_ > damage){
-			shield_ -= damage;
+		if(shield > damage){
+			shield -= damage;
 		}else{
-			damage -= shield_;
-			shield_ = 0;
-			health_ -= damage;
+			damage -= shield;
+			shield = 0;
+			health -= damage;
 		}
-		if (health_ < 1){
+		if (health < 1){
 			setShipStatus("Dead");
 			GamePlay.handler.sendToServer("Dead:"+shipName);
 		}
@@ -677,14 +677,14 @@ this.setHitBox(faceNumber);
 	 */
 	public void setShipStatus(String status) {
 		if ( status.compareTo("Alive") == 0 ){
-		shipStatus_ = shipStatus.ALIVE;		
+		shipStatus = ShipStatus.ALIVE;		
 		} else if (status.compareTo("Dead") == 0 ){
-			if(shipStatus_ == shipStatus.ALIVE){
+			if(shipStatus == ShipStatus.ALIVE){
 			incrementDeathCount();
 	
 			
 			}
-			shipStatus_ = shipStatus.DEAD;
+			shipStatus = ShipStatus.DEAD;
 		}
 	}
 	
@@ -692,8 +692,8 @@ this.setHitBox(faceNumber);
 	 * This returns the ship's status
 	 * @return shipStatus
 	 */
-	public shipStatus getShipStatus(){
-		return shipStatus_;
+	public ShipStatus getShipStatus(){
+		return shipStatus;
 	}
 
 	/**
@@ -702,12 +702,12 @@ this.setHitBox(faceNumber);
 	 */
 	public void setClientState(String string) {
 		if( string.compareTo("GAME")==0){
-			playerState_ = PlayerState.GAME;
+			playerState = PlayerState.GAME;
 		}
 		else if( string.compareTo("MENU")==0){
-			playerState_ = PlayerState.MENU;
+			playerState = PlayerState.MENU;
 		}if( string.compareTo("DISCONNECTED")==0){
-			playerState_ = PlayerState.DISCONNECT;
+			playerState = PlayerState.DISCONNECT;
 		}
 		
 	}
@@ -716,21 +716,21 @@ this.setHitBox(faceNumber);
 	 * @return playerState_
 	 */
 	public PlayerState getPlayerState(){
-		return playerState_;
+		return playerState;
 	}
 	/**
 	 * 
 	 * @return health_
 	 */
 	public double getHealth(){
-		return health_;
+		return health;
 	}
 	/**
 	 * This method changes the current health of the ship 
 	 * @param newHealth - new health value
 	 */
 	public void setHealth(double newHealth){
-		health_ = newHealth;
+		health = newHealth;
 	}
 	/**
 	 * This changes the name of the ship
@@ -745,7 +745,7 @@ this.setHitBox(faceNumber);
 	 * @return the maxHealth
 	 */
 	public double getMaxHealth() {
-		return maxHealth_;
+		return maxHealth;
 	}
 
 
@@ -753,7 +753,7 @@ this.setHitBox(faceNumber);
 	 * @param maxHealth the maxHealth to set
 	 */
 	public void setMaxHealth(double maxHealth) {
-		this.maxHealth_ = maxHealth;
+		this.maxHealth = maxHealth;
 	}
 
 
@@ -761,7 +761,7 @@ this.setHitBox(faceNumber);
 	 * @return the shield
 	 */
 	public double getShield() {
-		return shield_;
+		return shield;
 	}
 
 
@@ -769,7 +769,7 @@ this.setHitBox(faceNumber);
 	 * @param shield the shield to set
 	 */
 	public void setShield(double shield) {
-		this.shield_ = shield;
+		this.shield = shield;
 	}
 
 
@@ -777,7 +777,7 @@ this.setHitBox(faceNumber);
 	 * @return the maxshield
 	 */
 	public double getMaxShield() {
-		return maxShield_;
+		return maxShield;
 	}
 
 
@@ -785,7 +785,7 @@ this.setHitBox(faceNumber);
 	 * @param maxshield the maxshield to set
 	 */
 	public void setMaxShield(double maxshield) {
-		this.maxShield_ = maxshield;
+		this.maxShield = maxshield;
 	}
 
 
@@ -793,7 +793,7 @@ this.setHitBox(faceNumber);
 	 * @return the energy
 	 */
 	public double getEnergy() {
-		return energy_;
+		return energy;
 	}
 
 
@@ -801,7 +801,7 @@ this.setHitBox(faceNumber);
 	 * @param energy the energy to set
 	 */
 	public void setEnergy(double energy) {
-		this.energy_ = energy;
+		this.energy = energy;
 	}
 
 
@@ -809,7 +809,7 @@ this.setHitBox(faceNumber);
 	 * @return the maxEnergy
 	 */
 	public double getMaxEnergy() {
-		return maxEnergy_;
+		return maxEnergy;
 	}
 
 
@@ -817,7 +817,7 @@ this.setHitBox(faceNumber);
 	 * @param maxEnergy the maxEnergy to set
 	 */
 	public void setMaxEnergy(double maxEnergy) {
-		this.maxEnergy_ = maxEnergy;
+		this.maxEnergy = maxEnergy;
 	}
 
 	/**
@@ -905,14 +905,14 @@ this.setHitBox(faceNumber);
 	 * This method returns the ship to normal conditions and the location of x = 0, y = 0
 	 */
 	public void respawn() {
-		health_ = maxHealth_;
-		shield_ = maxShield_;
-		energy_ = maxEnergy_;
+		health = maxHealth;
+		shield = maxShield;
+		energy = maxEnergy;
 		x = Math.random()*100;
-		dx_=0;
-		dy_=0;
+		dx=0;
+		dy=0;
 		y = Math.random()*100;
-		shipStatus_ = shipStatus.ALIVE;
+		shipStatus = ShipStatus.ALIVE;
 		GamePlay.handler.sendToServer("Alive:"+shipName);
 	}
 	
@@ -921,14 +921,14 @@ this.setHitBox(faceNumber);
 	 * @return deathCount_
 	 */
 public int getDeathCount(){
-	return deathCount_;
+	return deathCount;
 }
 	/**
 	 * This returns true if the ship is dead. False if not dead
 	 * @return
 	 */
 	public boolean isDead() {
-		if(shipStatus_ == shipStatus.DEAD){
+		if(shipStatus == ShipStatus.DEAD){
 			return true;
 		}
 		else
@@ -939,7 +939,7 @@ public int getDeathCount(){
 	 * This increases the deathCount by one
 	 */
 	public void incrementDeathCount() {
-		deathCount_++;
+		deathCount++;
 		
 	}
 
