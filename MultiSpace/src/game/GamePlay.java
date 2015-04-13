@@ -306,6 +306,10 @@ public class GamePlay {
 			}
 		}
 		player.paint(g2d, pantDisplacementX, pantDisplacementY);
+		
+		//player.getHitBox().paint(g2d, pantDisplacementX, pantDisplacementY);
+		
+
 
 		drawUI(g2d);
 
@@ -416,6 +420,7 @@ public class GamePlay {
 		g2d.setStroke(new BasicStroke((float)lineThickness));
 		
 		g2d.setColor(Color.YELLOW);
+		
 		g2d.drawArc(boardMiddleX - 150, boardMiddleY - 150, 300, 300, (int)(90 - (angle / 2)), (int)angle);
 		g2d.drawLine((int)(boardMiddleX-lineThickness/2), boardMiddleY-148, (int)(boardMiddleX-lineThickness/2), (int)(boardMiddleY-150+angle+300));
 

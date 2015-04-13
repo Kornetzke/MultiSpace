@@ -1,5 +1,8 @@
 package SpaceClient;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
@@ -64,8 +67,9 @@ public class HitBox {
 		for (int i = 0; i < hitBoxPoints.length; i++) {
 			changedhitBoxPoints_[i] = new Point(hitBoxPoints[i]);
 		}
-
-		hitBoxPoly = new Polygon();
+		
+		
+		hitBoxPoly.reset();
 
 		AffineTransform.getRotateInstance(Math.toRadians(-dir), middle.x,
 				middle.y).transform(hitBoxPoints, 0, changedhitBoxPoints_, 0,
@@ -115,6 +119,23 @@ public class HitBox {
 		}
 
 		return false;
+	}
+	
+	public String toString(){
+		String returnString = "";
+		
+		for(int i = 0; i < hitBoxPoly.npoints;i++){
+			returnString +="["+hitBoxPoly.xpoints[i]+ ":"+hitBoxPoly.ypoints[i]+"]";
+		}
+		return returnString;
+	}
+	
+	public void paint(Graphics2D g2d, double displacementX, double displacementY){
+		g2d.setStroke(new BasicStroke(3));
+		g2d.translate(-displacementX, -displacementY);
+		g2d.drawPolygon(hitBoxPoly);
+		g2d.translate(displacementX, displacementY);
+		
 	}
 
 }
