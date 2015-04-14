@@ -28,7 +28,7 @@ public class Main extends JFrame {
 		setSize(width, height);
 		this.setAlwaysOnTop(false);
 		setLocationRelativeTo(null);
-		setTitle("Space Ship Now on the SVN");
+		setTitle("Space Ship Now on the Git");
 		this.setMinimumSize(new Dimension(width,height));
 		setFocusTraversalKeysEnabled(false);
 		this.setUndecorated(undecorated);
