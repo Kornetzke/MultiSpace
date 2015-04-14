@@ -120,6 +120,7 @@ public abstract class Drawable {
 	 * @param dy
 	 */
 	public void paint(Graphics2D g2d, double dx, double dy) {
+		
 		g2d.rotate(Math.toRadians(-getDirection()), middle.x - dx, middle.y
 				- dy);
 		g2d.drawImage(image, (int) (x - dx), (int) (y - dy), null);

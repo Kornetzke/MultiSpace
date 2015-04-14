@@ -131,7 +131,9 @@ public class HitBox {
 	}
 	
 	public void paint(Graphics2D g2d, double displacementX, double displacementY){
+		
 		g2d.setStroke(new BasicStroke(3));
+		g2d.setColor(Color.WHITE);
 		g2d.translate(-displacementX, -displacementY);
 		g2d.drawPolygon(hitBoxPoly);
 		g2d.translate(displacementX, displacementY);

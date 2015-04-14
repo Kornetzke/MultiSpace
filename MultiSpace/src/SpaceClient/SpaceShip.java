@@ -418,6 +418,7 @@ this.setHitBox(faceNumber);
 		for (int x = 0; x < weaponList_.size(); x++) {
 			weaponList_.get(x).paint(g2d, dx, dy);
 		}
+		
 		g2d.rotate(Math.toRadians(-getDirection()), middle.x - dx, middle.y - dy);		
 		g2d.drawImage(image, (int) (x - dx), (int) (y - dy), null);
 		g2d.rotate(Math.toRadians(getDirection()), middle.x - dx, middle.y - dy);

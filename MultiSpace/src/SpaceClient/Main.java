@@ -21,7 +21,7 @@ public class Main extends JFrame {
  * @param width: width of the frame
  * @param height: height of the frame
  */
-	public Main(int width, int height) {
+	public Main(int width, int height, boolean undecorated) {
 
 		add(new Board());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,9 +29,9 @@ public class Main extends JFrame {
 		this.setAlwaysOnTop(false);
 		setLocationRelativeTo(null);
 		setTitle("Space Ship Now on the SVN");
-		this.setMinimumSize(new Dimension(500, 500));
+		this.setMinimumSize(new Dimension(width,height));
 		setFocusTraversalKeysEnabled(false);
-		//this.setUndecorated(true);
+		this.setUndecorated(undecorated);
 		setVisible(true);
 	}
 /**
@@ -40,6 +40,6 @@ public class Main extends JFrame {
  */
 	public static void main(String[] args) {
 
-		new Main(500, 500);
+		new Main(500, 500,false);
 	}
 }

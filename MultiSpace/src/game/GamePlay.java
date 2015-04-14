@@ -33,15 +33,21 @@ public class GamePlay {
 
 	private static Hashtable<String, SpaceShip> playerHashTable = new Hashtable<String, SpaceShip>();
 
-	private double pantDisplacementX, pantDisplacementY; // Displacement for the x
-														// and
-														// y value for drawing
-														// other
-														// drawable objects, to
-														// center the vision of
-														// the
-														// board on the player
-														// screen with focus on
+	private double pantDisplacementX, pantDisplacementY; // Displacement for the
+															// x
+															// and
+															// y value for
+															// drawing
+															// other
+															// drawable objects,
+															// to
+															// center the vision
+															// of
+															// the
+															// board on the
+															// player
+															// screen with focus
+															// on
 
 	/**
 	 * The default constructor for game play will set up the player ship,
@@ -226,8 +232,8 @@ public class GamePlay {
 		}
 
 		if (player.isDead()) {
-			deadButton.update(new Point(Board.width / 2,
-					Board.height / 2 + 100));
+			deadButton
+					.update(new Point(Board.width / 2, Board.height / 2 + 100));
 
 		} else {
 			player.cycle();
@@ -291,6 +297,7 @@ public class GamePlay {
 
 		backgroundImage.paint(g2d, pantDisplacementX, pantDisplacementY);
 
+		
 		for (Drawable x : spaceDrawableList) {
 			if (Math.abs(player.getX() - x.getX()) <= 3000
 					&& Math.abs(player.getY() - x.getY()) <= 3000)
@@ -298,18 +305,15 @@ public class GamePlay {
 
 		}
 
-		synchronized (playerHashTable) {
-			for (SpaceShip x : playerHashTable.values()) {
-				x.paint(g2d, pantDisplacementX, pantDisplacementY);
-				
-				drawRadar(g2d, x.getmiddleX(), x.getmiddleY());
-			}
-		}
-		player.paint(g2d, pantDisplacementX, pantDisplacementY);
-		
-		//player.getHitBox().paint(g2d, pantDisplacementX, pantDisplacementY);
-		
+		for (SpaceShip x : playerHashTable.values()) {
+			x.paint(g2d, pantDisplacementX, pantDisplacementY);
 
+			drawRadar(g2d, x.getmiddleX(), x.getmiddleY());
+		}
+
+		player.paint(g2d, pantDisplacementX, pantDisplacementY);
+
+		player.getHitBox().paint(g2d, pantDisplacementX, pantDisplacementY);
 
 		drawUI(g2d);
 
@@ -322,8 +326,8 @@ public class GamePlay {
 			g2d.drawString("YOU ARE DEAD", Board.width / 2 - 4
 					* g2d.getFont().getSize(), Board.height / 2
 					- g2d.getFont().getSize());
-			g2d.drawString("Deaths: " + player.getDeathCount(), Board.width
-					/ 2 - 4 * g2d.getFont().getSize(), Board.height / 2);
+			g2d.drawString("Deaths: " + player.getDeathCount(), Board.width / 2
+					- 4 * g2d.getFont().getSize(), Board.height / 2);
 			deadButton.draw(g2d);
 		}
 
@@ -357,54 +361,48 @@ public class GamePlay {
 
 		g2d.setColor(Color.GREEN);
 		g2d.drawRoundRect(0, 0, UIwidth, UIheight / 3, 10, 10);
-		g2d.fillRoundRect(
-				0,
-				0,
+		g2d.fillRoundRect(0, 0,
 				(int) (UIwidth * (player.getHealth() / player.getMaxHealth())),
 				UIheight / 3, 10, 10);
 
 		g2d.setColor(Color.BLUE);
 		g2d.drawRoundRect(0, UIheight / 3 + 1, UIwidth, UIheight / 3, 10, 10);
-		g2d.fillRoundRect(
-				0,
-				UIheight / 3 + 1,
+		g2d.fillRoundRect(0, UIheight / 3 + 1,
 				(int) (UIwidth * (player.getShield() / player.getMaxShield())),
 				UIheight / 3, 10, 10);
 
 		g2d.setColor(Color.MAGENTA);
 		g2d.drawRoundRect(0, (UIheight * 2) / 3 + 1, UIwidth, UIheight / 3, 10,
 				10);
-		g2d.fillRoundRect(
-				0,
-				(UIheight * 2) / 3 + 1,
+		g2d.fillRoundRect(0, (UIheight * 2) / 3 + 1,
 				(int) (UIwidth * (player.getEnergy() / player.getMaxEnergy())),
 				UIheight / 3, 10, 10);
 
 	}
-/**
- * This method will draw a radar indicator based on opponent players middle x and y position. The 
- *  
- * @param g2d
- * @param oppenentMiddleX
- * @param opponentMiddleY
- */
-	public void drawRadar(Graphics2D g2d, double oppenentMiddleX,	double opponentMiddleY ) {
 
-		int boardMiddleX = Board.width/2;
-		int boardMiddleY = Board.height/2;
+	/**
+	 * This method will draw a radar indicator based on opponent players middle
+	 * x and y position. The
+	 * 
+	 * @param g2d
+	 * @param oppenentMiddleX
+	 * @param opponentMiddleY
+	 */
+	public void drawRadar(Graphics2D g2d, double oppenentMiddleX,
+			double opponentMiddleY) {
+
+		int boardMiddleX = Board.width / 2;
+		int boardMiddleY = Board.height / 2;
 		double lineThickness = 1.5;
 		double magnitude = 2;
 		int arcAngle = 40;
 		double angle;
 		double distance;
-		
 
-		g2d.rotate(
-				-(Math.atan2((double)player.getmiddleX() - oppenentMiddleX,
-						(double)player.getmiddleY() - opponentMiddleY)),
-						boardMiddleX,boardMiddleY);
-		
-		
+		g2d.rotate(-(Math.atan2((double) player.getmiddleX() - oppenentMiddleX,
+				(double) player.getmiddleY() - opponentMiddleY)), boardMiddleX,
+				boardMiddleY);
+
 		distance = Math.sqrt(Math.pow(
 				Math.abs(player.getmiddleX() - oppenentMiddleX), 2)
 				+ Math.pow(Math.abs(player.getmiddleY() - opponentMiddleY), 2));
@@ -414,22 +412,22 @@ public class GamePlay {
 		magnitude = (magnitude > 1) ? 1 : magnitude;
 		magnitude = (magnitude < 0.025) ? 0.025 : magnitude;
 
-
 		angle = arcAngle * magnitude;
 
-		g2d.setStroke(new BasicStroke((float)lineThickness));
-		
-		g2d.setColor(Color.YELLOW);
-		
-		g2d.drawArc(boardMiddleX - 150, boardMiddleY - 150, 300, 300, (int)(90 - (angle / 2)), (int)angle);
-		g2d.drawLine((int)(boardMiddleX-lineThickness/2), boardMiddleY-148, (int)(boardMiddleX-lineThickness/2), (int)(boardMiddleY-150+angle+300));
+		g2d.setStroke(new BasicStroke((float) lineThickness));
 
+		g2d.setColor(Color.YELLOW);
+
+		g2d.drawArc(boardMiddleX - 150, boardMiddleY - 150, 300, 300,
+				(int) (90 - (angle / 2)), (int) angle);
+		g2d.drawLine((int) (boardMiddleX - lineThickness / 2),
+				boardMiddleY - 148, (int) (boardMiddleX - lineThickness / 2),
+				(int) (boardMiddleY - 150 + angle + 300));
 
 		g2d.rotate(
 				(Math.atan2(player.getmiddleX() - oppenentMiddleX,
-						player.getmiddleY() - opponentMiddleY)),
-						boardMiddleX, boardMiddleY);
-
+						player.getmiddleY() - opponentMiddleY)), boardMiddleX,
+				boardMiddleY);
 
 	}
 
