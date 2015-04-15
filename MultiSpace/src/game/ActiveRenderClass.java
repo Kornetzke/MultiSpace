@@ -102,6 +102,7 @@ public class ActiveRenderClass {
 
 				pushGraphicsToScreen();
 
+				//give os some time.. not sure if does anything
 				Thread.yield();
 
 			} finally {
