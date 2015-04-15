@@ -90,7 +90,8 @@ public class ActiveRenderClass {
 				for (Square s : drawables) {
 					s.update(elapsedTime);
 				}
-
+				
+				initializeGraphics();
 				drawBackground();
 
 				for (Square s : drawables) {
@@ -99,17 +100,20 @@ public class ActiveRenderClass {
 
 				drawFrameRate();
 
-				drawToScreen();
+				pushGraphicsToScreen();
 
 				Thread.yield();
 
 			} finally {
 				dispose();
-				System.out.println(app.getContentPane().getSize());
-				// app.setSize(650, 650);
 			}
 
 		}
+	}
+	
+	public void initializeGraphics(){
+		g2d = bi.createGraphics();
+		g2d.setRenderingHints(rh);
 	}
 
 	public void dispose() {
@@ -124,7 +128,7 @@ public class ActiveRenderClass {
 			g2d.dispose();
 	}
 
-	public void drawToScreen() {
+	public void pushGraphicsToScreen() {
 		// Blit image and flip...
 
 		graphics = panel.getGraphics();
@@ -133,9 +137,6 @@ public class ActiveRenderClass {
 	}
 
 	public void drawBackground() {
-
-		g2d = bi.createGraphics();
-		g2d.setRenderingHints(rh);
 
 		g2d.setColor(background);
 		g2d.fillRect(0, 0, 650, 650);
